@@ -1,20 +1,24 @@
 <template>
-  <div>
-    <div v-if="!isAuthenticated">
-      <h1>Sign in</h1>
-      <p>
-        <router-link :to="{ name: 'register' }">Need an account?</router-link>
-      </p>
-      <form v-on:submit.prevent="onSubmit(username, password);">
-        <input type="text" v-model="username" placeholder="Username" />
-        <input type="password" v-model="password" placeholder="Password" />
-        <button>Sign in</button>
-      </form>
+  <section class="hero is-large">
+    <div class="hero-body">
+      <div class="container">
+        <div class="card card-width margin-auto card-padding" v-if="!isAuthenticated">
+          <b-field label="Username">
+              <b-input v-model="username"></b-input>
+          </b-field>
+          <b-field label="Password">
+              <b-input type="password" v-model="password"></b-input>
+          </b-field>
+          <div class="dp-flex">
+            <button class="button is-success is-outlined" v-on:click="onSubmit(username,password)">Login</button>
+          </div>
+        </div>
+        <div v-else>
+          <h1>Logged in</h1>
+        </div>
+      </div>
     </div>
-    <div v-else>
-      <h1>Logged in</h1>
-    </div>
-  </div>
+  </section>
 </template>
 
 <script>
@@ -50,4 +54,17 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.card-width {
+  max-width: 33.3%;
+}
+.margin-auto {
+  margin:auto;
+}
+.card-padding {
+  padding: 15px;
+}
+.dp-flex{
+  display: flex;
+  justify-content: center;
+}
 </style>
