@@ -48,12 +48,14 @@
                       <div class="dp-flex flex-center">
                         <img :src="user?user.avatarURL:null" class="avatar-size">
                       </div>
-                      <div class="columns border-bt-tp mg-40">
-                        <div class="column tx-center">
-                          คำอธิบาย
-                        </div>
-                        <div class="column tx-center">
-                          {{ user?user.description:"" }}
+                      <div class="mg-40">
+                        <div class="columns border-bt-tp">
+                          <div class="column tx-center">
+                            คำอธิบาย
+                          </div>
+                          <div class="column tx-center">
+                            {{ user?user.description:"" }}
+                          </div>
                         </div>
                       </div>
                     </section>
@@ -127,6 +129,6 @@ export default {
   border-color: #DCDCDC;
 }
 .mg-40 {
-  margin:40
+  margin:40px
 }
 </style>
