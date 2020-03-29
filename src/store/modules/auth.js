@@ -10,16 +10,16 @@ const state = {
 
 const getters = {
   isAuthenticated(state) {
-      return state.user !== null
+    return state.user !== null
   },
   getUser(state) {
-      return state.user
+    return state.user
   },
   getError(state) {
-      return state.error
+    return state.error
   },
   isLoading(state) {
-      return state.loading
+    return state.loading
   }
 }
 
@@ -69,16 +69,16 @@ const actions = {
 
 const mutations = {
   SET_ERROR(state, error) {
-      state.errors = error
+    state.errors = error
   },
   SET_AUTH(state, user) {
-      state.user = user
+    state.user = user
   },
   PURGE_AUTH(state) {
-      state.user = null
+    state.user = null
   },
   SET_LOADING(state, isLoading) {
-      state.loading = isLoading
+    state.loading = isLoading
   }
 }
 

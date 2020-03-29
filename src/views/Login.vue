@@ -4,10 +4,10 @@
       <div class="container">
         <div class="card card-width margin-auto card-padding">
           <b-field label="Username">
-              <b-input v-model="username"></b-input>
+            <b-input v-model="username"></b-input>
           </b-field>
           <b-field label="Password">
-              <b-input type="password" v-model="password"></b-input>
+            <b-input type="password" v-model="password"></b-input>
           </b-field>
           <div class="dp-flex">
             <button class="button is-success is-outlined" v-on:click="onSubmit(username,password)">Login</button>
