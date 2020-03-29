@@ -1,5 +1,5 @@
 <template>
-  <section class="hero is-large">
+  <section class="hero is-small">
     <div class="hero-body">
       <div class="container">
         <div class="card pd-45">

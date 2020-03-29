@@ -6,12 +6,12 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-        path: '/',
-        name: 'Login',
-        component: ()=>import('../views/Login')
+      path: '/login',
+      name: 'Login',
+      component: ()=>import('../views/Login')
     },
     {
-      path: '/dashboard',
+      path: '/',
       name: 'Dashboard',
       component: ()=>import('../views/Dashboard')
     }

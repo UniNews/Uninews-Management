@@ -41,6 +41,7 @@ const actions = {
   async logout ({ commit }) {
     commit('SET_LOADING', true)
     try {
+      localStorage.clear()
       commit('PURGE_AUTH')
       commit('SET_LOADING', false)
       commit('SET_ERROR', null)

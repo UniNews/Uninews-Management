@@ -40,13 +40,13 @@ export default {
         password: this.password
       }
       const result = await this.login(auth)
-      this.$router.push('/dashboard')
+      this.$router.push('/')
     }
   },
   mounted(){
     if(this.isAuthenticated){
       this.autoLogin()
-      this.$router.push('/dashboard')
+      this.$router.push('/')
     }
   },
   computed: {

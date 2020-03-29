@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Header />
+    <Header v-if="$route.name !== 'Login'" @logout="logout" />
       <router-view></router-view>
     <Footer />
   </div>
@@ -21,14 +21,22 @@ export default {
   },
   methods:{
     ...mapActions({
-      autoLogin:'Auth/autoLogin'
-    })
+      autoLogin:'Auth/autoLogin',
+      userLogout:'Auth/logout'
+    }),
+    async logout (event) {
+      if (event) {
+        const logoutStatus = await this.userLogout()
+        this.$router.push('/login')
+      }
+    }
   },
   mounted(){
-    if(this.isAuthenticated){
+    if (this.isAuthenticated) {
+      console.log('sssss')
       this.autoLogin()
-    }else{
-      this.$router.push('/')
+    } else {
+      this.$router.push('/login')
     }
   }
 };
