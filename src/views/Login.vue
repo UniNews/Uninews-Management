@@ -2,7 +2,7 @@
   <section class="hero is-large">
     <div class="hero-body">
       <div class="container">
-        <div class="card card-width margin-auto card-padding" v-if="!isAuthenticated">
+        <div class="card card-width margin-auto card-padding">
           <b-field label="Username">
               <b-input v-model="username"></b-input>
           </b-field>
@@ -12,9 +12,6 @@
           <div class="dp-flex">
             <button class="button is-success is-outlined" v-on:click="onSubmit(username,password)">Login</button>
           </div>
-        </div>
-        <div v-else>
-          <h1>Logged in</h1>
         </div>
       </div>
     </div>
@@ -34,14 +31,22 @@ export default {
   },
   methods: {
     ...mapActions({
-      login:'Auth/login'
+      login:'Auth/login',
+      autoLogin:'Auth/autoLogin'
     }),
-    onSubmit(username, password) {
+    async onSubmit(username, password) {
       const auth = {
         username: this.username,
         password: this.password
       }
-      this.login(auth)
+      const result = await this.login(auth)
+      this.$router.push('/dashboard')
+    }
+  },
+  mounted(){
+    if(this.isAuthenticated){
+      this.autoLogin()
+      this.$router.push('/dashboard')
     }
   },
   computed: {

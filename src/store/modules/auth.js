@@ -1,4 +1,5 @@
 import userService from '@/services/userservice'
+import axios from 'axios'
 
 const state = {
   user: null,
@@ -27,8 +28,8 @@ const actions = {
       commit('SET_LOADING', true)
       try {
         const result = await userService.login(credentials.username,credentials.password)
-        console.log(result,'user')
-        commit('SET_AUTH', result)
+        axios.defaults.headers.common["Authorization"] = `Bearer ${result.data.access_token}`
+        commit('SET_AUTH', result.data)
         commit('SET_LOADING', false)
         commit('SET_ERROR', null)
       } catch (err) {
@@ -46,6 +47,21 @@ const actions = {
     } catch (err) {
       commit('SET_ERROR', err)
       commit('SET_LOADING', false)
+    }
+  },
+  async autoLogin ({ commit }) {
+    commit('SET_LOADING', true)
+    try{
+      const storage = localStorage.getItem("vuex");
+      const token = JSON.parse(storage).Auth.user.access_token
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`
+      commit('SET_AUTH', JSON.parse(storage).Auth.user)
+      commit('SET_LOADING', false)
+      commit('SET_ERROR', null)
+    }catch(err) {
+      commit('SET_ERROR', err)
+      commit('SET_LOADING', false)
+      alert(err)
     }
   }
 }

@@ -11,7 +11,6 @@ export default {
         const data = await axios.post(`${API_URL}/admin-token`, json, {
             headers: { 'Content-Type': 'application/json' }
         })
-        console.log(data)
         return data
     },
     register: (email, password) => {
@@ -39,5 +38,8 @@ export default {
         return axios.post(`${API_URL}/users/${id}`, {
             headers: { 'Content-Type': 'application/json' }
         })
+    },
+    getAllUser: ()=>{
+        return axios.get(`${API_URL}/users`)
     }
 }
