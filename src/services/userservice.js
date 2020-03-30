@@ -39,7 +39,12 @@ export default {
             headers: { 'Content-Type': 'application/json' }
         })
     },
-    getAllUser: ()=>{
+    getAllUser: ()=> {
         return axios.get(`${API_URL}/users`)
+    },
+    putUser:(json,uid) => {
+        return axios.put(`${API_URL}/users/${uid}`, json,{
+            headers: { 'Content-Type': 'application/json' }
+        })
     }
 }

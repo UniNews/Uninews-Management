@@ -2,9 +2,18 @@
   <section class="hero is-small">
     <div class="hero-body">
       <div class="container">
+        <div class="mg-b-15 search-size mg-l-auto">
+          <b-input
+            rounded
+            v-model="query"
+            placeholder="Search"
+            icon="magnify"
+            clearable>
+          </b-input>
+        </div>
         <div class="card pd-45">
           <b-table
-            :data="users"
+            :data="filterUser"
             ref="table"
             paginated
             per-page="10"
@@ -61,7 +70,14 @@
                     </section>
                     <footer class="modal-card-foot">
                       <button class="button is-success">Save changes</button>
-                      <button class="button">Cancel</button>
+                      <b-button class="bg-red" @click="banUser(user._id)">
+                        <span>
+                          <b-icon
+                            icon="account-remove"
+                            size="30">
+                          </b-icon>
+                        </span>
+                      </b-button>
                     </footer>
                   </div>
                 </div>
@@ -82,6 +98,7 @@ export default {
   data() {
     return {
       users:[],
+      query:'',
       user:null,
       isCardModalActive: false
     };
@@ -95,10 +112,30 @@ export default {
       this.isCardModalActive = true
       const data = await userservice.getUserById(id)
       this.user = data.data
+    },
+    async banUser (uid) {
+      const data = { 
+        active:false,
+      }
+      await userservice.putUser(data,uid)
+      this.isCardModalActive = false
+      this.fetchUsers()
     }
   },
-  mounted(){
+  mounted() {
     this.fetchUsers()
+  },
+  computed:{
+    filterUser() {
+      return this.users.filter(item => {
+        if(this.query !== ''){
+          return item.displayName.match(this.query)
+        }
+        else{
+          return item.displayName !== ''
+        }
+      }) 
+    }
   }
 };
 </script>
@@ -130,5 +167,17 @@ export default {
 }
 .mg-40 {
   margin:40px
+}
+.bg-red {
+  background-color: #FFA07A;
+}
+.mg-b-15 {
+  margin-bottom: 15px;
+}
+.mg-l-auto {
+  margin-left: auto;
+}
+.search-size {
+  width: 250px;
 }
 </style>

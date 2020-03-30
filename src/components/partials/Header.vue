@@ -15,6 +15,9 @@
       <b-navbar-item href="/#/news">
         News
       </b-navbar-item>
+      <b-navbar-item href="/#/report">
+        Report
+      </b-navbar-item>
     </template>
     <template slot="end">
       <b-navbar-item tag="div">
