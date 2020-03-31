@@ -2,8 +2,16 @@
   <section class="hero is-small">
     <div class="hero-body">
       <div class="container">
+        <div class="mg-b-30 search-size mg-l-auto mg-r-9">
+          <b-input
+            rounded
+            v-model="query"
+            placeholder="Search"
+            icon="magnify">
+          </b-input>
+        </div>
         <div class="columns card pd-45 dp-flex flex-wrap">
-          <div class="column is-4" v-for="(item, index) in news" :key="index">
+          <div class="column is-4" v-for="(item, index) in filterNews" :key="index">
             <div :id="index" class="card pd-21 tx-center">
               <div class="tx-height">{{ item?item.title:"" }}</div>
               <img :src="item?item.imageURL[0]:null" class="img-size">
@@ -23,7 +31,8 @@ export default {
   name: "News",
   data() {
     return {
-      news:[]
+      news:[],
+      query:''
     };
   },
   methods: {
@@ -34,6 +43,17 @@ export default {
   },
   mounted(){
     this.fetchNews()
+  },
+  computed: {
+    filterNews(){
+      return this.news.filter(item=>{
+        if(this.query!=='') {
+          return item.title.toLowerCase().match(this.query.toLowerCase()) || (item.user?item.user.displayName.toLowerCase().match(this.query.toLowerCase()):false)
+        } else{
+          return item.title !== this.query
+        }
+      })
+    }
   }
 };
 </script>
@@ -64,5 +84,17 @@ export default {
 }
 div.pd-21:hover {
   border: 1px solid purple;
+}
+.mg-b-30 {
+  margin-bottom: 30px;
+}
+.mg-l-auto {
+  margin-left: auto;
+}
+.mg-r-9 {
+  margin-right: 9px;
+}
+.search-size {
+  width: 250px;
 }
 </style>

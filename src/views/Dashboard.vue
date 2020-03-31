@@ -7,8 +7,7 @@
             rounded
             v-model="query"
             placeholder="Search"
-            icon="magnify"
-            clearable>
+            icon="magnify">
           </b-input>
         </div>
         <div class="card pd-45">
@@ -47,7 +46,7 @@
                   </span>
                 </b-button>
               </b-table-column>
-              <b-modal :active.sync="isCardModalActive" scroll="keep">
+              <b-modal v-show="isCardModalActive" scroll="keep">
                 <div class="dp-flex flex-center">
                   <div class="modal-card">
                     <header class="modal-card-head">
@@ -129,7 +128,7 @@ export default {
     filterUser() {
       return this.users.filter(item => {
         if(this.query !== ''){
-          return item.displayName.match(this.query)
+          return item.displayName.toLowerCase().match(this.query.toLowerCase())
         }
         else{
           return item.displayName !== ''
