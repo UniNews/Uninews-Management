@@ -5,10 +5,10 @@ export default {
     login: async (email, password) => {
         const json = {
             grant_type: 'password',
-            email: email,
+            username: email,
             password: password
         }
-        const data = await axios.post(`${API_URL}/admin-token`, json, {
+        const data = await axios.post(`${API_URL}/signin`, json, {
             headers: { 'Content-Type': 'application/json' }
         })
         return data
