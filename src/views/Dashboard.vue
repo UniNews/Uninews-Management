@@ -34,7 +34,7 @@
                   {{ props.row.active }}
               </b-table-column>
               <b-table-column field="accessType" label="Role">
-                  {{ props.row.accessType }}
+                  {{ props.row.role }}
               </b-table-column>
               <b-table-column>
                 <b-button @click="fetchUserById(props.row._id)">
@@ -105,7 +105,7 @@ export default {
   methods: {
     async fetchUsers () {
       const data = await userservice.getAllUser()
-      this.users = data.data
+      this.users = data.data.users;
     },
     async fetchUserById (id) {
       this.isCardModalActive = true
