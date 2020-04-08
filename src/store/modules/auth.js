@@ -28,7 +28,7 @@ const actions = {
       commit('SET_LOADING', true)
       try {
         const result = await userService.login(credentials.username,credentials.password)
-        axios.defaults.headers.common["Authorization"] = `Bearer ${result.data.access_token}`
+        axios.defaults.headers.common["Authorization"] = `Bearer ${result.data.accessToken}`
         commit('SET_AUTH', result.data)
         commit('SET_LOADING', false)
         commit('SET_ERROR', null)
@@ -54,7 +54,7 @@ const actions = {
     commit('SET_LOADING', true)
     try{
       const storage = localStorage.getItem("vuex");
-      const token = JSON.parse(storage).Auth.user.access_token
+      const token = JSON.parse(storage).Auth.user.accessToken
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`
       commit('SET_AUTH', JSON.parse(storage).Auth.user)
       commit('SET_LOADING', false)

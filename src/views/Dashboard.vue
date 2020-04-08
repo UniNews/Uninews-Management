@@ -34,7 +34,7 @@
                   {{ props.row.active }}
               </b-table-column>
               <b-table-column field="accessType" label="Role">
-                  {{ props.row.accessType }}
+                  {{ props.row.role }}
               </b-table-column>
               <b-table-column>
                 <b-button @click="fetchUserById(props.row._id)">
@@ -46,7 +46,7 @@
                   </span>
                 </b-button>
               </b-table-column>
-              <b-modal v-show="isCardModalActive" scroll="keep">
+              <b-modal :active.sync="isCardModalActive" scroll="keep">
                 <div class="dp-flex flex-center">
                   <div class="modal-card">
                     <header class="modal-card-head">
@@ -62,7 +62,7 @@
                             คำอธิบาย
                           </div>
                           <div class="column tx-center">
-                            {{ user?user.description:"" }}
+                            {{ user?user.bio:"" }}
                           </div>
                         </div>
                       </div>
@@ -105,12 +105,12 @@ export default {
   methods: {
     async fetchUsers () {
       const data = await userservice.getAllUser()
-      this.users = data.data
+      this.users = data.data.users;
     },
     async fetchUserById (id) {
       this.isCardModalActive = true
       const data = await userservice.getUserById(id)
-      this.user = data.data
+      this.user = data
     },
     async banUser (uid) {
       const data = { 
