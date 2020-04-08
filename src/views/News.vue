@@ -13,9 +13,9 @@
         <div class="columns card pd-45 dp-flex flex-wrap">
           <div class="column is-4" v-for="(item, index) in filterNews" :key="index">
             <div :id="index" class="card pd-21 tx-center">
-              <div class="tx-height">{{ item?item.title:"" }}</div>
-              <img :src="item?item.imageURL[0]:null" class="img-size">
-              <div class="tx-height">{{ item.user?item.user.displayName:null }}</div>
+              <div class="tx-height newsTitle">{{ item.title?item.title:item.description}}</div>
+              <img :src="item.imageURL?item.imageURL:null" class="img-size">
+              <div class="tx-height">{{ item.author?item.author.displayName:null }}</div>
             </div>
           </div>
         </div>
@@ -38,7 +38,7 @@ export default {
   methods: {
     async fetchNews() {
       const data = await newservice.getAllNews()
-      this.news = data.data
+      this.news = data.data.articles
     }
   },
   mounted(){
@@ -48,9 +48,15 @@ export default {
     filterNews(){
       return this.news.filter(item=>{
         if(this.query!=='') {
-          return item.title.toLowerCase().match(this.query.toLowerCase()) || (item.user?item.user.displayName.toLowerCase().match(this.query.toLowerCase()):false)
+          if(item.title) 
+            return item.title.toLowerCase().match(this.query.toLowerCase()) || (item.author?item.author.displayName.toLowerCase().match(this.query.toLowerCase()):false)
+          else
+            return item.description.toLowerCase().match(this.query.toLowerCase()) || (item.author?item.author.displayName.toLowerCase().match(this.query.toLowerCase()):false)
         } else{
-          return item.title !== this.query
+          if(item.title)
+            return item.title !== this.query
+          else
+            return item.description !== this.query
         }
       })
     }
@@ -96,5 +102,11 @@ div.pd-21:hover {
 }
 .search-size {
   width: 250px;
+}
+.newsTitle {
+  width: 100%;
+  white-space: nowrap; 
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>
