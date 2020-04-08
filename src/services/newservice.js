@@ -3,7 +3,7 @@ import axios from 'axios'
 
 export default {
     getAllNews: () => {
-        return axios.get(`${API_URL}/news/`)
+        return axios.get(`${API_URL}/articles`)
     },
     getNewsRecommendation: (id) => {
         return axios.get(`${API_URL}/news/${id}`)
