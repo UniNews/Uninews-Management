@@ -40,7 +40,9 @@ export default {
         password: this.password
       }
       const result = await this.login(auth)
-      this.$router.push('/')
+      if(this.isAuthenticated) {
+        this.$router.push('/')
+      }
     }
   },
   mounted(){
