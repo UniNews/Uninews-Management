@@ -46,11 +46,12 @@
                   </span>
                 </b-button>
               </b-table-column>
-              <b-modal :active.sync="isCardModalActive" scroll="keep">
+              <div v-bind:class="displayCard" scroll="keep">
                 <div class="dp-flex flex-center">
                   <div class="modal-card">
                     <header class="modal-card-head">
                       <p class="modal-card-title tx-center">{{ user?user.displayName:"" }}</p>
+                      <button class="delete" @click="isCardModalActive=false"></button>
                     </header>
                     <section class="modal-card-body">
                       <div class="dp-flex flex-center">
@@ -80,7 +81,7 @@
                     </footer>
                   </div>
                 </div>
-              </b-modal>
+              </div>
             </template>
           </b-table>
         </div>
@@ -134,6 +135,9 @@ export default {
           return item.displayName !== ''
         }
       }) 
+    },
+    displayCard() {
+        return this.isCardModalActive? "modal is-active modal-background" : "modal modal-background"
     }
   }
 };

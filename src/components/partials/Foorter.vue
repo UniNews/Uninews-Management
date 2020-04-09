@@ -1,5 +1,5 @@
 <template>
-  <div class="p-absolute bt-10 r-10">
+  <div class="bt-10 r-10">
     <b-button v-show="!this.isOpen" v-on:click="clickButton()" class="bg-green b-radious-20 b-0 bt-10">
       <span>
         <b-icon
@@ -8,7 +8,7 @@
         </b-icon>
       </span>
     </b-button>
-    <div v-show="this.isOpen" class="box-height b-shadow pd-18">
+    <div v-show="this.isOpen" class="p-absolute box-height b-shadow pd-18">
       <div class="box-width">
         <div class="dp-flex f-end">
           <span v-on:click="clickButton()">
@@ -19,7 +19,7 @@
           </span>
         </div>
         <b-field label="Description">
-          <b-input id="chats" maxlength="200" type="textarea" class="chat-area" />
+          <b-input maxlength="200" type="textarea" class="chat-area" />
         </b-field>
       </div>
     </div>

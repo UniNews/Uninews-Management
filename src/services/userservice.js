@@ -11,17 +11,8 @@ export default {
         const data = await axios.post(`${API_URL}/signin`, json, {
             headers: { 'Content-Type': 'application/json' }
         })
+        console.log(data)
         return data
-    },
-    register: (email, password) => {
-        const json = {
-            displayName: email,
-            email: email,
-            password: password
-        }
-        return axios.post(`${API_URL}/registerByEmail`, json, {
-            headers: { 'Content-Type': 'application/json' }
-        });
     },
     getProfile: () => {
         return axios.get(`${API_URL}/profile/me`)

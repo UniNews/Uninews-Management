@@ -9,7 +9,7 @@
           <b-field label="Password">
             <b-input type="password" v-model="password"></b-input>
           </b-field>
-          <div class="dp-flex">
+          <div class="dp-flex f-center">
             <button class="button is-success is-outlined" v-on:click="onSubmit(username,password)">Login</button>
           </div>
         </div>
@@ -70,8 +70,10 @@ export default {
 .card-padding {
   padding: 15px;
 }
-.dp-flex{
+.dp-flex {
   display: flex;
+}
+.f-center {
   justify-content: center;
 }
 </style>
