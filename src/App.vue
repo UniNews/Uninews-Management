@@ -33,7 +33,6 @@ export default {
   },
   mounted(){
     if (this.isAuthenticated) {
-      console.log('sssss')
       this.autoLogin()
     } else {
       this.$router.push('/login')

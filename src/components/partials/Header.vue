@@ -21,6 +21,12 @@
     </template>
     <template slot="end">
       <b-navbar-item tag="div">
+        <div v-if="$route.name !== 'Login'">
+          <img :src="getUser().avatarURL" class="image-avatar">
+          {{ getUser().displayName }}
+        </div>
+      </b-navbar-item>
+      <b-navbar-item tag="div">
         <div v-if="$route.name !== 'Login'" class="buttons">
           <a class="button is-light" @click="logout()">
             Logout
@@ -33,14 +39,24 @@
 
 
 <script>
-import { mapGetter } from 'vuex'
+import { mapGetter, mapGetters } from 'vuex'
 export default {
   name: "Header",
   methods: {
     logout () {
       this.$emit('logout', true)
     },
-
+    ...mapGetters(
+      {
+        getUser:'Auth/getUser'
+      }
+    )
   }
 };
 </script>
+<style scoped>
+.image-avatar {
+  margin:-6px;
+  border-radius: 22px;
+}
+</style>

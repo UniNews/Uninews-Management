@@ -29,7 +29,9 @@ const actions = {
       try {
         const result = await userService.login(credentials.username,credentials.password)
         axios.defaults.headers.common["Authorization"] = `Bearer ${result.data.accessToken}`
-        commit('SET_AUTH', result.data)
+        localStorage.setItem('token',result.data.accessToken)
+        const result2 = await userService.getProfile()
+        commit('SET_AUTH', result2.data)
         commit('SET_LOADING', false)
         commit('SET_ERROR', null)
       } catch (err) {
@@ -53,10 +55,10 @@ const actions = {
   async autoLogin ({ commit }) {
     commit('SET_LOADING', true)
     try{
-      const storage = localStorage.getItem("vuex");
-      const token = JSON.parse(storage).Auth.user.accessToken
+      const token = localStorage.getItem('token')
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`
-      commit('SET_AUTH', JSON.parse(storage).Auth.user)
+      const result = await userService.getProfile()
+      commit('SET_AUTH', result.data)
       commit('SET_LOADING', false)
       commit('SET_ERROR', null)
     }catch(err) {

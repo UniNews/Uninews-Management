@@ -11,11 +11,10 @@ export default {
         const data = await axios.post(`${API_URL}/signin`, json, {
             headers: { 'Content-Type': 'application/json' }
         })
-        console.log(data)
         return data
     },
     getProfile: () => {
-        return axios.get(`${API_URL}/profile/me`)
+        return axios.get(`${API_URL}/profile`)
     },
     getNormalUserById: (id) => {
         return axios.get(`${API_URL}/users/${id}/normal`).then(response => response.data)
