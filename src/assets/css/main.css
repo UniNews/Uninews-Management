@@ -1,0 +1,25 @@
+html {
+    position: relative;
+    min-height: 100%;
+}
+.mg-40 {
+    margin:40px
+}
+.mg-l-auto {
+    margin-left: auto;
+}
+.pd-45 {
+    padding: 45px;
+}
+.dp-flex {
+    display: flex;
+}
+.flex-center {
+    justify-content: center;
+}
+.tx-center {
+    text-align: center;
+}
+.search-size {
+    width: 250px;
+}

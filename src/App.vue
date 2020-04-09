@@ -41,10 +41,3 @@ export default {
   }
 };
 </script>
-
-<style>
-html {
-    position: relative;
-    min-height: 100%;
-}
-</style>

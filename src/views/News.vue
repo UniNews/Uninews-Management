@@ -66,12 +66,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.pd-45 {
-  padding: 45px;
-}
-.dp-flex {
-  display: flex;
-}
 .flex-wrap {
   flex-flow: wrap;
 }
@@ -85,23 +79,14 @@ export default {
 .tx-height {
   height: 48px;
 }
-.tx-center {
-  text-align: center;
-}
 div.pd-21:hover {
   border: 1px solid purple;
 }
 .mg-b-30 {
   margin-bottom: 30px;
 }
-.mg-l-auto {
-  margin-left: auto;
-}
 .mg-r-9 {
   margin-right: 9px;
-}
-.search-size {
-  width: 250px;
 }
 .newsTitle {
   white-space: nowrap; 

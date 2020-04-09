@@ -10,7 +10,7 @@
     </b-button>
     <div v-show="this.isOpen" v-bind:class="boxSize">
       <div class="box-width">
-        <div class="dp-flex f-end">
+        <div class="dp-flex flex-end">
           <span v-on:click="clickButton()">
             <b-icon
               icon="close"
@@ -140,10 +140,7 @@ export default {
 .pd-18 {
   padding: 18px;
 }
-.dp-flex {
-  display: flex;
-}
-.f-end {
+.flex-end {
   justify-content: flex-end;
 }
 .p-fixed {

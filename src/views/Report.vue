@@ -49,33 +49,15 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.pd-45 {
-  padding: 45px;
-}
 .avatar-size {
   max-width: 50%;
 }
 .margin-0-auto {
   margin:auto;
 }
-.dp-flex {
-  display: flex;
-}
-.flex-center {
-  justify-content: center;
-}
-.tx-center {
-  text-align: center;
-}
 .border-bt-tp {
   border-bottom: 0.25px solid;
   border-top: 0.25px solid;
   border-color: #DCDCDC;
-}
-.mg-40 {
-  margin:40px
-}
-.bg-red {
-  background-color: #FFA07A;
 }
 </style>
