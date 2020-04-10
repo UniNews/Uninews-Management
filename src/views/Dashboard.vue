@@ -114,10 +114,7 @@ export default {
       this.user = data
     },
     async banUser (uid) {
-      const data = { 
-        active:false,
-      }
-      await userservice.putUser(data,uid)
+      await userservice.banUser(uid)
       this.isCardModalActive = false
       this.fetchUsers()
     }
