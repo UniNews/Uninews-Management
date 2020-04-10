@@ -19,5 +19,9 @@ export default {
     },
     getNewsById: (id) => {
         return axios.get(`${API_URL}/news/${id}`)
+    },
+    postNews:async (data) => {
+        const result = await axios.post(`${API_URL}/articles`,data)
+        return result
     }
 }

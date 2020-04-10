@@ -25,33 +25,15 @@
           </b-select>
         </b-field>
         <b-field label="Tags" grouped group-multiline>
-          <div class="control mg-r-10 mg-l-20">
-            <b-tag type="is-primary"
+          <div v-for="item in allTags" :key="item" @click="addToArray(item)" class="control mg-r-10">
+            <b-tag v-bind:class="isSelected(item)"
               attached>
-              กีฬา
-            </b-tag>
-          </div>
-          <div class="control mg-r-10">
-            <b-tag type="is-primary"
-              attached>
-              เกมส์
-            </b-tag>
-          </div>
-          <div class="control mg-r-10">
-            <b-tag type="is-primary"
-              attached>
-              เรียน
-            </b-tag>
-          </div>
-          <div class="control">
-            <b-tag type="is-primary"
-              attached>
-                เงี่ยน
+              {{ item }}
             </b-tag>
           </div>
         </b-field>
         <b-field v-show="selectedValue==='news'" label="Title">
-          <b-input maxlength="200"/>
+          <b-input v-model="title" maxlength="200"/>
         </b-field>
         <b-field v-show="selectedValue==='news'" label="NewsType">
           <b-select v-model="newsTypeValue" placeholder="Select an article-type" expanded>
@@ -75,8 +57,9 @@
           </span>
         </b-field>
         <b-field label="Description">
-          <b-input maxlength="200" type="textarea" class="chat-area" />
+          <b-input v-model="description" maxlength="200" type="textarea" class="chat-area" />
         </b-field>
+        <b-button @click="postArticles()">Post</b-button>
       </div>
     </div>
   </div>
@@ -91,16 +74,34 @@ export default {
       selectedValue:"community",
       newsTypeValue:null,
       data:['club', 'promotion', 'lost-found', 'university'],
-      file:null
+      file:null,
+      tags:[],
+      description:'',
+      title:'',
+      allTags:['เกมส์','กีฬา','เรียน','เงี่ยน']
     }
   },
   methods:{
-    clickButton(){
+    clickButton() {
       this.isOpen= !this.isOpen
+    },
+    postArticles() {
+      this.$emit('postArticles', { articleType:this.selectedValue, description:this.description, tags:this.tags, newsType:this.newsTypeValue, title:this.title, imageURL:this.file })
+    },
+    addToArray(value) {
+      const index = this.tags.indexOf(value);
+      if (index > -1) {
+        this.tags.splice(index, 1);
+      } else {
+        this.tags.push(value)
+      }
+    },
+    isSelected(value) {
+      return this.tags.includes(value)? "is-warning" : "is-primary"
     }
   },
   computed:{
-    boxSize(){
+    boxSize() {
       return this.selectedValue==="community"? "box-height b-shadow pd-18 bg-white":"box-height-2 b-shadow pd-18 bg-white"
     }
   }
@@ -126,7 +127,7 @@ export default {
   right: 3px;
 }
 .box-height {
-  height: 335px;
+  height: 410px;
 }
 .bg-white {
   background: white;
@@ -149,10 +150,13 @@ export default {
 .mg-r-10 {
   margin-right: 10px;
 }
-.mg-l-20 {
+/* .mg-l-20 {
   margin-left: 20px;
-}
+} */
 .box-height-2 {
-  height: 565px;
+  height: 640px;
+}
+.mg-r-10:nth-of-type(1) {
+  margin-left: 20px;
 }
 </style>

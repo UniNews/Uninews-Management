@@ -22,8 +22,8 @@
     <template slot="end">
       <b-navbar-item tag="div">
         <div v-if="$route.name !== 'Login'">
-          <img :src="getUser().avatarURL" class="image-avatar">
-          {{ getUser().displayName }}
+          <img :src="getUser()?getUser().avatarURL:null" class="image-avatar">
+          {{ getUser()?getUser().displayName:null }}
         </div>
       </b-navbar-item>
       <b-navbar-item tag="div">
