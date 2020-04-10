@@ -70,7 +70,4 @@ export default {
 .card-padding {
   padding: 15px;
 }
-.f-center {
-  justify-content: center;
-}
 </style>
