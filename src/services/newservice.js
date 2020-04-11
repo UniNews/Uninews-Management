@@ -23,5 +23,8 @@ export default {
     postNews:async (data) => {
         const result = await axios.post(`${API_URL}/articles`,data)
         return result
-    }
+    },
+    uploadNewsImage: (formData) => {
+      return axios.post(`${API_URL}/images`, formData);
+    },
 }
