@@ -21,11 +21,12 @@
         </div>
       </div>
     </div>
+    <b-loading :is-full-page="loadingStatus.isFullPage" :active.sync="loadingStatus.isLoading" :can-cancel="loadingStatus.canCancel"></b-loading>
   </section>
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import newservice from "../services/newservice"
 export default {
   name: "News",
@@ -36,15 +37,24 @@ export default {
     };
   },
   methods: {
+    ...mapActions({
+      startLoading: 'Spinner/startLoading',
+      finishLoading: 'Spinner/finishLoading',
+    }),
     async fetchNews() {
+      this.startLoading();
       const data = await newservice.getAllNews()
       this.news = data.data.articles
+      this.finishLoading();
     }
   },
   mounted(){
     this.fetchNews()
   },
   computed: {
+    ...mapGetters({
+      loadingStatus: 'Spinner/loadingStatus'
+    }),
     filterNews(){
       return this.news.filter(item=>{
         if(this.query!=='') {
