@@ -27,4 +27,7 @@ export default {
     uploadNewsImage: (formData) => {
         return axios.post(`${API_URL}/images`, formData);
     },
+    getAllCommunity: () => {
+        return axios.get(`${API_URL}/articles/communities`)
+    }
 }

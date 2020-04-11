@@ -24,6 +24,11 @@ export default new Router({
       path: '/report',
       name: 'Report',
       component: ()=>import('../views/Report')
+    },
+    {
+      path: '/community',
+      name: 'Community',
+      component: ()=>import('../views/Community')
     }
   ]
 })

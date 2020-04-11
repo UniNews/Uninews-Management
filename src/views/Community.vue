@@ -13,9 +13,7 @@
         <div class="columns card pd-45 dp-flex flex-wrap">
           <div class="column is-4" v-for="(item, index) in filterNews" :key="index">
             <div :id="index" class="card pd-21 tx-center">
-              <div class="tx-height newsTitle">{{ item.title }}</div>
-              <img :src="item.imageURL" class="img-size">
-              <div>{{ item.newsType }}</div>
+              <div class="tx-height newsTitle">{{ item.description }}</div>
               <div class="tx-height">{{ item.author?item.author.displayName:null }}</div>
               <div>{{ convertTimestamp(item.createdAt) }}</div>
             </div>
@@ -32,7 +30,7 @@ import { mapActions } from "vuex";
 import newservice from "@/services/newservice"
 import { convertTimestamptoDate } from '@/assets/javascript/date'
 export default {
-  name: "News",
+  name: "Community",
   data() {
     return {
       news:[],
@@ -43,7 +41,7 @@ export default {
   methods: {
     async fetchNews() {
       this.isLoading = true
-      const data = await newservice.getAllNews()
+      const data = await newservice.getAllCommunity()
       this.news = data.data.articles
       this.isLoading = false
     },
@@ -78,10 +76,6 @@ export default {
 <style scoped>
 .flex-wrap {
   flex-flow: wrap;
-}
-.img-size { 
-  width: 246.66px;
-  height: 246.66px;
 }
 .pd-21 {
   padding: 21px;

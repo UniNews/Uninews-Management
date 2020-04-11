@@ -12,7 +12,7 @@
 
 <script>
 import { mapActions } from "vuex";
-import userservice from "../services/userservice"
+import userservice from "@/services/userservice"
 export default {
   name: "Report",
   data() {

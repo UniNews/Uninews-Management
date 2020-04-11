@@ -15,6 +15,9 @@
       <b-navbar-item href="/#/news">
         News
       </b-navbar-item>
+      <b-navbar-item href="/#/community">
+        Community
+      </b-navbar-item>
       <b-navbar-item href="/#/report">
         Report
       </b-navbar-item>
