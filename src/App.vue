@@ -33,6 +33,7 @@ export default {
     },
     postArticles (event) {
       newsService.postNews(event)
+        .catch(err => console.log(err.response))
     }
   },
   mounted(){
