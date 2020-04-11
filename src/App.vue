@@ -32,7 +32,6 @@ export default {
       }
     },
     postArticles (event) {
-      console.log(event)
       newsService.postNews(event)
     }
   },
