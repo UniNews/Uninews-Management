@@ -15,6 +15,7 @@
         </div>
       </div>
     </div>
+    <b-loading :is-full-page="true" :active.sync="isLoading"/>
   </section>
 </template>
 
@@ -26,7 +27,8 @@ export default {
   data() {
     return {
       username: null,
-      password: null
+      password: null,
+      isLoading:false
     };
   },
   methods: {
@@ -35,11 +37,13 @@ export default {
       autoLogin:'Auth/autoLogin'
     }),
     async onSubmit(username, password) {
+      this.isLoading=true
       const auth = {
         username: this.username,
         password: this.password
       }
       const result = await this.login(auth)
+      this.isLoading=false
       if(this.isAuthenticated) {
         this.$router.push('/')
       }

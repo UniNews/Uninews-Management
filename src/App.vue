@@ -3,6 +3,7 @@
     <Header v-if="$route.name !== 'Login'" @logout="logout" />
       <router-view></router-view>
     <Footer v-if="$route.name !== 'Login'" @postArticles="postArticles"/>
+    <b-loading :is-full-page="true" :active.sync="isLoading"/>
   </div>
 </template>
 
@@ -15,6 +16,11 @@ import newsService from './services/newservice'
 export default {
   name: "app",
   components: { Footer, Header },
+  data() {
+    return {
+      isLoading:false
+    }
+  },
   computed: {
     ...mapGetters({
       isAuthenticated:'Auth/isAuthenticated'
@@ -31,9 +37,10 @@ export default {
         this.$router.push('/login')
       }
     },
-    postArticles (event) {
-      newsService.postNews(event)
-        .catch(err => console.log(err.response))
+    async postArticles (event) {
+      this.isLoading=true
+      await newsService.postNews(event)
+      this.isLoading=false
     }
   },
   mounted(){

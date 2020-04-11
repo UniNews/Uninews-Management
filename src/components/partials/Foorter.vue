@@ -133,9 +133,6 @@ export default {
 };
 </script>
 <style scoped>
-.bg-green {
-  background-color: rgb(191, 252, 191);
-}
 .b-radious-20 {
   border-radius: 20px;
 }

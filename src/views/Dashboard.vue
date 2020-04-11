@@ -70,10 +70,18 @@
                     </section>
                     <footer class="modal-card-foot">
                       <button class="button is-success">Save changes</button>
-                      <b-button class="bg-red" @click="banUser(user._id)">
+                      <b-button v-if="user?user.active===true:null" class="bg-red" @click="banUser(user._id)">
                         <span>
                           <b-icon
                             icon="account-remove"
+                            size="30">
+                          </b-icon>
+                        </span>
+                      </b-button>
+                      <b-button v-else class="bg-green" @click="unBanUser(user._id)">
+                        <span>
+                          <b-icon
+                            icon="account"
                             size="30">
                           </b-icon>
                         </span>
@@ -87,6 +95,7 @@
         </div>
       </div>
     </div>
+    <b-loading :is-full-page="true" :active.sync="isLoading"/>
   </section>
 </template>
 
@@ -100,23 +109,37 @@ export default {
       users:[],
       query:'',
       user:null,
-      isCardModalActive: false
+      isCardModalActive: false,
+      isLoading: false
     };
   },
   methods: {
     async fetchUsers () {
+      this.isLoading = true
       const data = await userservice.getAllUser()
       this.users = data.data.users;
+      this.isLoading = false
     },
     async fetchUserById (id) {
-      this.isCardModalActive = true
+      this.isLoading = true
       const data = await userservice.getUserById(id)
       this.user = data
+      this.isLoading = false
+      this.isCardModalActive = true
     },
     async banUser (uid) {
+      this.isLoading = true
       await userservice.banUser(uid)
       this.isCardModalActive = false
       this.fetchUsers()
+      this.isLoading = false
+    },
+    async unBanUser (uid) {
+      this.isLoading = true
+      await userservice.unBanUser(uid)
+      this.isCardModalActive = false
+      this.fetchUsers()
+      this.isLoading = false
     }
   },
   mounted() {

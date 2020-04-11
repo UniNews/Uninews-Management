@@ -21,6 +21,7 @@
         </div>
       </div>
     </div>
+    <b-loading :is-full-page="true" :active.sync="isLoading"/>
   </section>
 </template>
 
@@ -32,16 +33,19 @@ export default {
   data() {
     return {
       news:[],
-      query:''
+      query:'',
+      isLoading:false
     };
   },
   methods: {
     async fetchNews() {
+      this.isLoading = true
       const data = await newservice.getAllNews()
       this.news = data.data.articles
+      this.isLoading = false
     }
   },
-  mounted(){
+  mounted() {
     this.fetchNews()
   },
   computed: {

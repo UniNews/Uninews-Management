@@ -23,3 +23,6 @@ html {
 .search-size {
     width: 250px;
 }
+.bg-green {
+    background-color: rgb(191, 252, 191);
+}

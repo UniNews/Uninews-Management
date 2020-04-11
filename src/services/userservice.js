@@ -38,13 +38,13 @@ export default {
         })
     },
     banUser: (uid) => {
-      return axios.post(`${API_URL}/users/${uid}/ban`,{
-          headers: { 'Content-Type': 'application/json' }
-      });
+        return axios.post(`${API_URL}/users/${uid}/ban`,{
+            headers: { 'Content-Type': 'application/json' }
+        });
     },
     unBanUser: (uid) => {
-      return axios.delete(`${API_URL}/users/${uid}/ban`,{
-          headers: { 'Content-Type': 'application/json' }
-      });
+        return axios.delete(`${API_URL}/users/${uid}/ban`,{
+            headers: { 'Content-Type': 'application/json' }
+        });
     },
 }
