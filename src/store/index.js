@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import VuexPersistence from 'vuex-persist'
 import authModule from './modules/auth'
+import spinnerModule from './modules/spinner'
 
 Vue.use(Vuex)
 
@@ -10,7 +11,8 @@ const vuexLocal = new VuexPersistence({
 })
 
 const modules = {
-  Auth: authModule
+  Auth: authModule,
+  Spinner: spinnerModule
 }
 
 export default new Vuex.Store({
