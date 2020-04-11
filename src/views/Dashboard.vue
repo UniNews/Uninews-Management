@@ -87,12 +87,11 @@
         </div>
       </div>
     </div>
-    <b-loading :is-full-page="loadingStatus.isFullPage" :active.sync="loadingStatus.isLoading" :can-cancel="loadingStatus.canCancel"></b-loading>
+    <b-loading :is-full-page="true" :active.sync="isLoading" :can-cancel="true"></b-loading>
   </section>
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
 import userservice from "../services/userservice"
 export default {
   name: "Dashboard",
@@ -102,25 +101,22 @@ export default {
       query:'',
       user:null,
       isCardModalActive: false,
+      isLoading: false,
     };
   },
   methods: {
-    ...mapActions({
-      startLoading: 'Spinner/startLoading',
-      finishLoading: 'Spinner/finishLoading',
-    }),
     async fetchUsers () {
-      this.startLoading();
+      this.isLoading = true;
       const data = await userservice.getAllUser()
       this.users = data.data.users;
-      this.finishLoading();
+      this.isLoading = false;
     },
     async fetchUserById (id) {
-      this.startLoading();
-      this.isCardModalActive = true
+      this.isLoading = true;
       const data = await userservice.getUserById(id)
       this.user = data
-      this.finishLoading();
+      this.isCardModalActive = true
+      this.isLoading = false;
     },
     async banUser (uid) {
       await userservice.banUser(uid)
@@ -132,9 +128,6 @@ export default {
     this.fetchUsers()
   },
   computed:{
-    ...mapGetters({
-      loadingStatus: 'Spinner/loadingStatus'
-    }),
     filterUser() {
       return this.users.filter(item => {
         if(this.query !== ''){

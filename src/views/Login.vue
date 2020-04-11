@@ -15,7 +15,7 @@
         </div>
       </div>
     </div>
-    <b-loading :is-full-page="loadingStatus.isFullPage" :active.sync="loadingStatus.isLoading" :can-cancel="loadingStatus.canCancel"></b-loading>
+    <b-loading :is-full-page="true" :active.sync="isLoading" :can-cancel="true"></b-loading>
   </section>
 </template>
 
@@ -27,24 +27,23 @@ export default {
   data() {
     return {
       username: null,
-      password: null
+      password: null,
+      isLoading: false,
     };
   },
   methods: {
     ...mapActions({
       login:'Auth/login',
       autoLogin:'Auth/autoLogin',
-      startLoading: 'Spinner/startLoading',
-      finishLoading: 'Spinner/finishLoading',
     }),
     async onSubmit(username, password) {
-      this.startLoading();
+      this.isLoading = true;
       const auth = {
         username: this.username,
         password: this.password
       }
       const result = await this.login(auth)
-      this.finishLoading();
+      this.isLoading = false;
       if(this.isAuthenticated) {
         this.$router.push('/')
       }
@@ -59,7 +58,6 @@ export default {
   computed: {
     ...mapGetters({
       isAuthenticated:'Auth/isAuthenticated',
-      loadingStatus: 'Spinner/loadingStatus'
     })
   }
 };

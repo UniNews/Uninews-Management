@@ -21,40 +21,33 @@
         </div>
       </div>
     </div>
-    <b-loading :is-full-page="loadingStatus.isFullPage" :active.sync="loadingStatus.isLoading" :can-cancel="loadingStatus.canCancel"></b-loading>
+    <b-loading :is-full-page="true" :active.sync="isLoading" :can-cancel="true"></b-loading>
   </section>
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
 import newservice from "../services/newservice"
 export default {
   name: "News",
   data() {
     return {
       news:[],
-      query:''
+      query:'',
+      isLoading: false,
     };
   },
   methods: {
-    ...mapActions({
-      startLoading: 'Spinner/startLoading',
-      finishLoading: 'Spinner/finishLoading',
-    }),
     async fetchNews() {
-      this.startLoading();
+      this.isLoading = true;
       const data = await newservice.getAllNews()
       this.news = data.data.articles
-      this.finishLoading();
+      this.isLoading = false;
     }
   },
   mounted(){
     this.fetchNews()
   },
   computed: {
-    ...mapGetters({
-      loadingStatus: 'Spinner/loadingStatus'
-    }),
     filterNews(){
       return this.news.filter(item=>{
         if(this.query!=='') {
