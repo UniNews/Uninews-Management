@@ -34,6 +34,7 @@ export default {
     postArticles (event) {
       console.log(event)
       newsService.postNews(event)
+        .catch(err => console.log(err.response))
     }
   },
   mounted(){

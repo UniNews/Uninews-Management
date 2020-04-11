@@ -46,7 +46,7 @@
           </b-select>
         </b-field>
         <b-field v-show="selectedValue==='news'"   class="file">
-          <b-upload v-model="file">
+          <b-upload v-model="file" @input="onImageSelected">
               <a class="button is-primary">
                   <b-icon icon="upload"></b-icon>
                   <span>Upload Image</span>
@@ -66,6 +66,7 @@
 </template>
 
 <script>
+import newservice from "../../services/newservice"
 export default {
   name: "Footer",
   data() {
@@ -75,6 +76,7 @@ export default {
       newsTypeValue:null,
       data:['club', 'promotion', 'lost-found', 'university'],
       file:null,
+      fileImageUrl: null,
       tags:[],
       description:'',
       title:'',
@@ -85,8 +87,10 @@ export default {
     clickButton() {
       this.isOpen= !this.isOpen
     },
-    postArticles() {
-      this.$emit('postArticles', { articleType:this.selectedValue, description:this.description, tags:this.tags, newsType:this.newsTypeValue, title:this.title, imageURL:this.file })
+    async postArticles() {
+      await this.onImageUpload();
+      this.$emit('postArticles', { articleType:this.selectedValue, description:this.description, tags:this.tags, newsType:this.newsTypeValue, title:this.title, imageURL: this.fileImageUrl });
+      this.resetFooter();
     },
     addToArray(value) {
       const index = this.tags.indexOf(value);
@@ -98,6 +102,27 @@ export default {
     },
     isSelected(value) {
       return this.tags.includes(value)? "is-warning" : "is-primary"
+    },
+    onImageSelected(event) {
+      this.file = event;
+    },
+    async onImageUpload() {
+      if(this.file) {
+        const formData = new FormData();
+        formData.append('image', this.file);
+        let result = await newservice.uploadNewsImage(formData);
+        this.fileImageUrl = process.env.VUE_APP_API_URL + result.data.uri;
+      }
+    },
+    resetFooter() {
+      this.isOpen = false;
+      this.selectedValue = "community";
+      this.newsTypeValue = null;
+      this.file = null;
+      this.fileImageUrl = null;
+      this.tags = [];
+      this.description = '';
+      this.title = '';
     }
   },
   computed:{
