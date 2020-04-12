@@ -26,3 +26,7 @@ html {
 .bg-green {
     background-color: rgb(191, 252, 191);
 }
+.card-img-size {
+    width: 300px;
+    height: 300px;
+}

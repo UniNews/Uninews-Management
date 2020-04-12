@@ -55,7 +55,7 @@
                     </header>
                     <section class="modal-card-body">
                       <div class="dp-flex flex-center">
-                        <img :src="user?user.avatarURL:null" class="avatar-size">
+                        <img :src="user?user.avatarURL:null" class="card-img-size">
                       </div>
                       <div class="mg-40">
                         <div class="columns border-bt-tp">
@@ -69,7 +69,6 @@
                       </div>
                     </section>
                     <footer class="modal-card-foot">
-                      <button class="button is-success">Save changes</button>
                       <b-button v-if="user?user.active===true:null" class="bg-red" @click="banUser(user._id)">
                         <span>
                           <b-icon
@@ -165,9 +164,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.avatar-size {
-  max-width: 50%;
-}
 .margin-0-auto {
   margin:auto;
 }

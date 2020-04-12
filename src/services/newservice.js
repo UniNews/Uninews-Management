@@ -5,20 +5,8 @@ export default {
     getAllNews: () => {
         return axios.get(`${API_URL}/articles/news`)
     },
-    getNewsRecommendation: (id) => {
-        return axios.get(`${API_URL}/news/${id}`)
-    },
-    getUniversityNews: () => {
-        return axios.get(`${API_URL}/news/universities`)
-    },
-    getPromotionsNews: () => {
-        return axios.get(`${API_URL}/news/promotions`)
-    },
-    getClubNews: () => {
-        return axios.get(`${API_URL}/news/club`)
-    },
     getNewsById: (id) => {
-        return axios.get(`${API_URL}/news/${id}`)
+        return axios.get(`${API_URL}/articles/${id}`)
     },
     postNews: async (data) => {
         const result = await axios.post(`${API_URL}/articles`,data)
@@ -29,5 +17,17 @@ export default {
     },
     getAllCommunity: () => {
         return axios.get(`${API_URL}/articles/communities`)
+    },
+    getCommentsById: (id) => {
+        const data = axios.get(`${API_URL}/articles/${id}/comments`)
+        return data
+    },
+    deleteArticles: (id) => {
+        const data = axios.delete(`${API_URL}/articles/${id}`)
+        return data
+    },
+    deleteComment:(id, cid)=> {
+        const data = axios.delete(`${API_URL}/articles/${id}/comments/${cid}`)
+        return data
     }
 }

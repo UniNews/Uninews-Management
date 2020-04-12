@@ -12,12 +12,77 @@
         </div>
         <div class="columns card pd-45 dp-flex flex-wrap">
           <div class="column is-4" v-for="(item, index) in filterNews" :key="index">
-            <div :id="index" class="card pd-21 tx-center">
+            <div :id="index" class="card pd-21 tx-center" @click="fetchNewsById(item._id)">
               <div class="tx-height newsTitle">{{ item.description }}</div>
               <div class="tx-height">{{ item.author?item.author.displayName:null }}</div>
               <div>{{ convertTimestamp(item.createdAt) }}</div>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+    <div v-bind:class="displayCard" scroll="keep">
+      <div class="dp-flex flex-center">
+        <div class="modal-card">
+          <header class="modal-card-head">
+            <p class="modal-card-title tx-center newsTitle w-1">{{ eachnews?eachnews.title:null }}</p>
+            <button class="delete" @click="isCardModalActive=false"></button>
+          </header>
+          <section class="modal-card-body">
+            <div class="mg-40">
+              <div class="tx-center">
+                คำอธิบาย
+              </div>
+              <div class="tx-center">
+                {{ eachnews?eachnews.description:"" }}
+              </div>
+              <div class="columns border-bt-tp">
+                <div class="column tx-center">
+                  คนเขียน
+                </div>
+                <div class="column tx-center">
+                  {{ eachnews?eachnews.author.displayName:"" }}
+                </div>
+              </div>
+              <div class="mg-25">
+                ความเห็น
+              </div>
+              <div v-if="comments!==[]">
+                <div v-for="(comment, index) in comments" :key="index" class="columns border-bt-tp mg-25">
+                  <div class="column is-one-third mg-10">
+                    <img :src="comment?comment.author.avatarURL:null" class="img-avatar"/>
+                  </div>
+                  <div class="column dp-flex flex-item-center">
+                    <div class="mg-37">
+                      <div>{{ comment?comment.author.displayName:null }}</div>
+                      <div>{{ comment?comment.description:null }}</div>
+                      <div>{{ comment?convertTimestamp(comment.createdAt):null }}</div>
+                    </div>
+                    <div>
+                      <b-button class="bg-red" @click="deleteComment(eachnews._id,comment._id)">
+                        <span>
+                          <b-icon
+                            icon="delete"
+                            size="30">
+                          </b-icon>
+                        </span>
+                      </b-button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <footer class="modal-card-foot">
+            <b-button class="bg-red" @click="deleteArticles(eachnews._id)">
+              <span>
+                <b-icon
+                  icon="delete"
+                  size="30">
+                </b-icon>
+              </span>
+            </b-button>
+          </footer>
         </div>
       </div>
     </div>
@@ -35,7 +100,10 @@ export default {
     return {
       news:[],
       query:'',
-      isLoading:false
+      isLoading:false,
+      eachnews:null,
+      isCardModalActive:false,
+      comments:[]
     };
   },
   methods: {
@@ -47,6 +115,28 @@ export default {
     },
     convertTimestamp(value){
       return convertTimestamptoDate(value)
+    },
+    async fetchNewsById (id) {
+      this.isLoading = true
+      const data = await newservice.getNewsById(id)
+      const data2 = await newservice.getCommentsById(id)
+      this.eachnews = data.data
+      this.comments = data2.data
+      this.isLoading = false
+      this.isCardModalActive = true
+    },
+    async deleteArticles (id) {
+      this.isLoading = true
+      const data = await newservice.deleteArticles(id)
+      this.isCardModalActive = false
+      this.fetchNews()
+      this.isLoading = false
+    },
+    async deleteComment (id,cid) {
+      this.isLoading = true
+      const data = await newservice.deleteComment(id, cid)
+      this.fetchNewsById(id)
+      this.isLoading = false
     }
   },
   mounted() {
@@ -67,6 +157,9 @@ export default {
             return item.description !== this.query
         }
       })
+    },
+    displayCard() {
+        return this.isCardModalActive? "modal is-active modal-background" : "modal modal-background"
     }
   }
 };
@@ -96,5 +189,28 @@ div.pd-21:hover {
   white-space: nowrap; 
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.bg-red {
+  background-color: #FFA07A;
+}
+.w-1 {
+  width: 1px
+}
+.img-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 60px;
+}
+.mg-10 {
+  margin: 10px;
+}
+.mg-25 {
+  margin: 25px;
+}
+.mg-37 {
+  margin: 37px;
+}
+.flex-item-center {
+  align-items: center;
 }
 </style>
