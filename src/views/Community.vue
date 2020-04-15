@@ -28,41 +28,49 @@
             <p class="modal-card-title tx-center newsTitle w-1">{{ eachnews?eachnews.title:null }}</p>
             <button class="delete" @click="isCardModalActive=false"></button>
           </header>
-          <section class="modal-card-body">
+          <section class="modal-card-body pd-0">
             <div class="mg-40">
-              <div class="tx-center">
-                คำอธิบาย
-              </div>
-              <div class="tx-center">
-                {{ eachnews?eachnews.description:"" }}
-              </div>
-              <div class="columns border-bt-tp">
-                <div class="column tx-center">
-                  คนเขียน
+              <div class="columns border-bt">
+                <div class="column is-one-third tx-center">
+                  <img :src="eachnews? eachnews.author.avatarURL:null" class="img-avatar"/>
                 </div>
-                <div class="column tx-center">
-                  {{ eachnews?eachnews.author.displayName:"" }}
+                <div class="column pd-25">
+                  <div class="hd-size hd-w-bold">
+                    {{eachnews?eachnews.author.displayName:null}}
+                  </div>
+                  <div class="t-height dp-flex flex-center flex-item-center">
+                    {{ eachnews?eachnews.description:"" }}
+                  </div>
+                  <div class="dp-flex">
+                    <b-icon
+                      icon="calendar"
+                      size="30">
+                    </b-icon>
+                    <div>
+                      {{eachnews?convertTimestamp(eachnews.createdAt):null}}
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div class="mg-25">
+              <div class="mg-25 hd-w-bold hd-comment">
                 ความเห็น
               </div>
               <div v-if="comments!==[]">
-                <div v-for="(comment, index) in comments" :key="index" class="columns border-bt-tp mg-25">
+                <div v-for="(comment, index) in comments" :key="index" class="columns card border-bt-tp mg-14">
                   <div class="column is-one-third mg-10">
                     <img :src="comment?comment.author.avatarURL:null" class="img-avatar"/>
                   </div>
-                  <div class="column dp-flex flex-item-center">
+                  <div class="column dp-flex flex-item-start flex-between">
                     <div class="mg-37">
                       <div>{{ comment?comment.author.displayName:null }}</div>
                       <div>{{ comment?comment.description:null }}</div>
                       <div>{{ comment?convertTimestamp(comment.createdAt):null }}</div>
                     </div>
                     <div>
-                      <b-button class="bg-red" @click="deleteComment(eachnews._id,comment._id)">
+                      <b-button @click="deleteComment(eachnews._id,comment._id)">
                         <span>
                           <b-icon
-                            icon="delete"
+                            icon="close"
                             size="30">
                           </b-icon>
                         </span>
@@ -74,12 +82,9 @@
             </div>
           </section>
           <footer class="modal-card-foot">
-            <b-button class="bg-red" @click="deleteArticles(eachnews._id)">
+            <b-button type="is-danger" @click="deleteArticles(eachnews._id)">
               <span>
-                <b-icon
-                  icon="delete"
-                  size="30">
-                </b-icon>
+                Delete
               </span>
             </b-button>
           </footer>
@@ -204,13 +209,51 @@ div.pd-21:hover {
 .mg-10 {
   margin: 10px;
 }
-.mg-25 {
-  margin: 25px;
+.mg-14 {
+  margin: 14px;
 }
 .mg-37 {
   margin: 37px;
 }
 .flex-item-center {
   align-items: center;
+}
+.pd-0 {
+  padding: 0px;
+}
+.news-img-size {
+  width: 640px;
+  height: 426.66px;
+}
+.pd-25 {
+  padding: 25px;
+}
+.border-bt {
+  border-bottom: 0.25px solid;
+  border-color: #DCDCDC;
+}
+.hd-size {
+  font-size: 20px;
+}
+.hd-w-bold {
+  font-weight: bold;
+}
+.pd-19 {
+  padding: 19px;
+}
+.t-height {
+  height: 170px;
+}
+.hd-comment {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-left: 4px #DCDCDC solid;
+  padding-left: 10px;
+}
+.flex-item-start {
+  align-items: start;
+}
+.flex-between {
+  justify-content: space-between;
 }
 </style>
