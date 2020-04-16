@@ -50,7 +50,7 @@
                 <div class="dp-flex flex-center">
                   <div class="modal-card">
                     <header class="modal-card-head">
-                      <p class="modal-card-title tx-center">{{ user?user.displayName:"" }}</p>
+                      <p class="modal-card-title tx-center newsTitle w-1">{{ user?user.displayName:"" }}</p>
                       <button class="delete" @click="isCardModalActive=false"></button>
                     </header>
                     <section class="modal-card-body">
@@ -59,30 +59,89 @@
                       </div>
                       <div class="mg-40">
                         <div class="columns border-bt-tp">
-                          <div class="column tx-center">
-                            คำอธิบาย
+                          <div class="column tx-center hd-w-bold">
+                            ชื่อ
                           </div>
                           <div class="column tx-center">
-                            {{ user?user.bio:"" }}
+                            {{ user?user.firstName:"" }}
                           </div>
                         </div>
+                        <div class="columns border-bt">
+                          <div class="column tx-center hd-w-bold">
+                            นามสกุล
+                          </div>
+                          <div class="column tx-center">
+                            {{ user?user.lastName:"" }}
+                          </div>
+                        </div>
+                        <div class="columns border-bt">
+                          <div class="column tx-center hd-w-bold">
+                            อีเมล
+                          </div>
+                          <div class="column tx-center">
+                            {{ user?user.email:"" }}
+                          </div>
+                        </div>
+                        <div class="columns border-bt">
+                          <div class="column tx-center hd-w-bold">
+                            ช่องทางติดต่อ
+                          </div>
+                          <div class="column tx-center">
+                            {{ user?user.contacts:"" }}
+                          </div>
+                        </div>
+                        <div class="tx-center mg-22 hd-w-bold">
+                          คำอธิบาย
+                        </div>
+                        <div class="columns border-bt-tp pd-tp-10 pd-bt-10">
+                          {{ user?user.bio:"" }}
+                        </div>
+                        <div class="columns border-bt pd-tp-10 pd-bt-10">
+                          <div class="column tx-center hd-w-bold">
+                            สร้างเมื่อ
+                          </div>
+                          <div class="column tx-center dp-flex">
+                            <b-icon
+                            icon="calendar"
+                            size="30"/>
+                            {{ user?convertTimestamp(user.createdAt):null }}
+                          </div>
+                        </div>
+                        <div class="columns border-bt pd-tp-10 pd-bt-10">
+                          <div class="column tx-center hd-w-bold">
+                            อัฟเดทล่าสุด
+                          </div>
+                          <div class="column tx-center dp-flex">
+                            <b-icon
+                            icon="clock"
+                            size="30"/>
+                            {{ user?convertTimestamp(user.updateAt):null }}
+                          </div>
+                        </div>
+
                       </div>
                     </section>
                     <footer class="modal-card-foot">
-                      <b-button v-if="user?user.active===true:null" class="bg-red" @click="banUser(user._id)">
-                        <span>
+                      <b-button v-if="user?user.active===true:null" type="is-danger" @click="banUser(user._id)">
+                        <span class="dp-flex">
                           <b-icon
                             icon="account-remove"
                             size="30">
                           </b-icon>
+                          <div>
+                            Ban
+                          </div>
                         </span>
                       </b-button>
-                      <b-button v-else class="bg-green" @click="unBanUser(user._id)">
-                        <span>
+                      <b-button v-else type="is-success" @click="unBanUser(user._id)">
+                        <span class="dp-flex">
                           <b-icon
                             icon="account"
                             size="30">
                           </b-icon>
+                          <div>
+                            Unban
+                          </div>
                         </span>
                       </b-button>
                     </footer>
@@ -101,6 +160,7 @@
 <script>
 import { mapActions } from "vuex";
 import userservice from "@/services/userservice"
+import { convertTimestamptoDate } from '@/assets/javascript/date'
 export default {
   name: "Dashboard",
   data() {
@@ -139,6 +199,8 @@ export default {
       this.isCardModalActive = false
       this.fetchUsers()
       this.isLoading = false
+    },convertTimestamp(value){
+      return convertTimestamptoDate(value)
     }
   },
   mounted() {
@@ -177,5 +239,24 @@ export default {
 }
 .mg-b-15 {
   margin-bottom: 15px;
+}
+.mg-22 {
+  margin: 22px;
+}
+.pd-tp-10 {
+  padding-top:10px;
+}
+.pd-bt-10 {
+  padding-bottom:10px;
+}
+.hd-w-bold {
+  font-weight: bold;
+}
+.border-bt {
+  border-bottom: 0.25px solid;
+  border-color: #DCDCDC;
+}
+.w-1 {
+  width: 1px;
 }
 </style>

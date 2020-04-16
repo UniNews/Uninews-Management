@@ -13,10 +13,10 @@
         <div class="columns card pd-45 dp-flex flex-wrap">
           <div class="column is-4" v-for="(item, index) in filterNews" :key="index">
             <div :id="index" class="card pd-21 tx-center" @click="fetchNewsById(item._id)">
-              <div class="tx-height newsTitle">{{ item.title }}</div>
+              <div class="tx-height newsTitle hd-w-bold">{{ item.title }}</div>
               <img :src="item.imageURL" class="img-size">
               <div>{{ item.newsType }}</div>
-              <div class="tx-height">{{ item.author?item.author.displayName:null }}</div>
+              <div class="tx-height hd-w-bold">{{ item.author?item.author.displayName:null }}</div>
               <div>{{ convertTimestamp(item.createdAt) }}</div>
             </div>
           </div>
@@ -71,8 +71,13 @@
                   <div class="column dp-flex flex-item-start flex-between">
                     <div class="mg-37">
                       <div>{{ comment?comment.author.displayName:null }}</div>
-                      <div>{{ comment?comment.description:null }}</div>
-                      <div>{{ comment?convertTimestamp(comment.createdAt):null }}</div>
+                      <div class="pd-tp-10">{{ comment?comment.description:null }}</div>
+                      <div class="dp-flex pd-tp-10">
+                        <b-icon
+                        icon="calendar"
+                        size="30"/>
+                        {{ comment?convertTimestamp(comment.createdAt):null }}
+                      </div>
                     </div>
                     <div>
                       <b-button @click="deleteComment(eachnews._id,comment._id)">
@@ -268,5 +273,8 @@ div.pd-21:hover {
 }
 .flex-between {
   justify-content: space-between;
+}
+.pd-tp-10 {
+  padding-top:10px;
 }
 </style>

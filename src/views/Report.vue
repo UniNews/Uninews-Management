@@ -25,13 +25,13 @@
       <div class="dp-flex flex-center">
         <div class="modal-card">
           <header class="modal-card-head">
-            <p class="modal-card-title tx-center newsTitle w-1">{{ eachnews?eachnews.title:null }}</p>
+            <p class="modal-card-title tx-center newsTitle w-1">การรายงาน</p>
             <button class="delete" @click="isCardModalActive=false"></button>
           </header>
           <section class="modal-card-body">
             <div class="mg-40">
               <div class="tx-center">
-                คำอธิบาย
+                สาเหตุ
               </div>
               <div class="tx-center">
                 {{ eachnews?eachnews.description:"" }}
@@ -43,16 +43,16 @@
                 <div class="column tx-center">
                   {{ eachnews?eachnews.author.displayName:"" }}
                 </div>
+                <div class="column tx-center">
+                  {{ destinationArticle }}
+                </div>
               </div>
             </div>
           </section>
           <footer class="modal-card-foot">
-            <b-button class="bg-red" @click="deleteArticles(eachnews._id)">
+            <b-button type="is-danger" @click="deleteArticles(eachnews._id)">
               <span>
-                <b-icon
-                  icon="delete"
-                  size="30">
-                </b-icon>
+                Delete
               </span>
             </b-button>
           </footer>
@@ -66,6 +66,7 @@
 <script>
 import { mapActions } from "vuex";
 import reportService from "@/services/reportservice"
+import newService from '@/services/newservice'
 import { convertTimestamptoDate } from '@/assets/javascript/date'
 export default {
   name: "Report",
@@ -75,7 +76,8 @@ export default {
       query:'',
       isLoading:false,
       eachnews:null,
-      isCardModalActive:false
+      isCardModalActive:false,
+      destinationArticle:null
     };
   },
   methods: {
@@ -92,6 +94,12 @@ export default {
       this.isLoading = true
       const data = await reportService.getReportById(id)
       this.eachnews = data.data.report
+      let result
+      if( this.eachnews.type==="article" ) { 
+        result = await newService.getNewsById(this.eachnews.postDestination)
+      } else {
+        console.log(eachnews.type)
+      }
       this.isLoading = false
       this.isCardModalActive = true
     },

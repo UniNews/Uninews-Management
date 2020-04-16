@@ -38,10 +38,7 @@
                   <div class="hd-size hd-w-bold">
                     {{eachnews?eachnews.author.displayName:null}}
                   </div>
-                  <div class="t-height dp-flex flex-center flex-item-center">
-                    {{ eachnews?eachnews.description:"" }}
-                  </div>
-                  <div class="dp-flex">
+                  <div class="dp-flex pd-tp-10">
                     <b-icon
                       icon="calendar"
                       size="30">
@@ -49,6 +46,9 @@
                     <div>
                       {{eachnews?convertTimestamp(eachnews.createdAt):null}}
                     </div>
+                  </div>
+                  <div class="pd-tp-10">
+                    {{ eachnews?eachnews.description:"" }}
                   </div>
                 </div>
               </div>
@@ -63,8 +63,14 @@
                   <div class="column dp-flex flex-item-start flex-between">
                     <div class="mg-37">
                       <div>{{ comment?comment.author.displayName:null }}</div>
-                      <div>{{ comment?comment.description:null }}</div>
-                      <div>{{ comment?convertTimestamp(comment.createdAt):null }}</div>
+                      <div class="pd-tp-10">{{ comment?comment.description:null }}</div>
+                      <div class="dp-flex pd-tp-10">
+                        <b-icon
+                        icon="calendar"
+                        size="30">
+                        </b-icon>
+                        {{ comment?convertTimestamp(comment.createdAt):null }}
+                      </div>
                     </div>
                     <div>
                       <b-button @click="deleteComment(eachnews._id,comment._id)">
@@ -255,5 +261,8 @@ div.pd-21:hover {
 }
 .flex-between {
   justify-content: space-between;
+}
+.pd-tp-10 {
+  padding-top: 10px;
 }
 </style>
