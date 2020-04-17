@@ -14,7 +14,7 @@
           <div class="column is-4" v-for="(item, index) in filterNews" :key="index">
             <div :id="index" class="card pd-21 tx-center" @click="fetchNewsById(item._id)">
               <div class="tx-height newsTitle">{{ item.description }}</div>
-              <div class="tx-height">{{ item.author?item.author.displayName:null }}</div>
+              <div class="tx-height hd-w-bold">{{ item.author?item.author.displayName:null }}</div>
               <div>{{ convertTimestamp(item.createdAt) }}</div>
             </div>
           </div>
@@ -25,10 +25,10 @@
       <div class="dp-flex flex-center">
         <div class="modal-card">
           <header class="modal-card-head">
-            <p class="modal-card-title tx-center newsTitle w-1">{{ eachnews?eachnews.title:null }}</p>
+            <p class="modal-card-title tx-center newsTitle w-1">โพสต์สาธารณะ</p>
             <button class="delete" @click="isCardModalActive=false"></button>
           </header>
-          <section class="modal-card-body pd-0">
+          <section class="modal-card-body">
             <div class="mg-40">
               <div class="columns border-bt">
                 <div class="column is-one-third tx-center">
@@ -56,7 +56,7 @@
                 ความเห็น
               </div>
               <div v-if="comments!==[]">
-                <div v-for="(comment, index) in comments" :key="index" class="columns card border-bt-tp mg-14">
+                <div v-for="(comment, index) in comments" :key="index" class="columns card mg-14">
                   <div class="column is-one-third mg-10">
                     <img :src="comment?comment.author.avatarURL:null" class="img-avatar"/>
                   </div>
@@ -145,7 +145,7 @@ export default {
     },
     async deleteComment (id,cid) {
       this.isLoading = true
-      const data = await newservice.deleteComment(id, cid)
+      const data = await newservice.deleteComment(cid)
       this.fetchNewsById(id)
       this.isLoading = false
     }
@@ -221,28 +221,12 @@ div.pd-21:hover {
 .mg-37 {
   margin: 37px;
 }
-.flex-item-center {
-  align-items: center;
-}
-.pd-0 {
-  padding: 0px;
-}
 .news-img-size {
   width: 640px;
   height: 426.66px;
 }
-.pd-25 {
-  padding: 25px;
-}
-.border-bt {
-  border-bottom: 0.25px solid;
-  border-color: #DCDCDC;
-}
 .hd-size {
   font-size: 20px;
-}
-.hd-w-bold {
-  font-weight: bold;
 }
 .pd-19 {
   padding: 19px;
@@ -261,8 +245,5 @@ div.pd-21:hover {
 }
 .flex-between {
   justify-content: space-between;
-}
-.pd-tp-10 {
-  padding-top: 10px;
 }
 </style>

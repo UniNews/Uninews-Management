@@ -14,7 +14,7 @@
           <div class="column is-4" v-for="(item, index) in filterNews" :key="index">
             <div :id="index" class="card pd-21 tx-center" @click="fetchNewsById(item._id)">
               <div class="tx-height newsTitle">{{ item.description }}</div>
-              <div class="tx-height">{{ item.author?item.author.displayName:null }}</div>
+              <div class="tx-height hd-w-bold">{{ item.author?item.author.displayName:null }}</div>
               <div>{{ convertTimestamp(item.createdAt) }}</div>
             </div>
           </div>
@@ -30,22 +30,67 @@
           </header>
           <section class="modal-card-body">
             <div class="mg-40">
-              <div class="tx-center">
-                สาเหตุ
-              </div>
-              <div class="tx-center">
-                {{ eachnews?eachnews.description:"" }}
+              <div class="columns">
+                <div class="column is-one-third tx-center">
+                  <img :src="eachnews? eachnews.author.avatarURL:null" class="img-avatar"/>
+                </div>
+                <div class="column pd-25">
+                  <div class="hd-size hd-w-bold">
+                    {{eachnews?eachnews.author.displayName:null}}
+                  </div>
+                  <div class="dp-flex pd-tp-10">
+                    <b-icon
+                      icon="calendar"
+                      size="30">
+                    </b-icon>
+                    <div>
+                      {{eachnews?convertTimestamp(eachnews.createdAt):null}}
+                    </div>
+                  </div>
+                  <div class="pd-tp-10">
+                    {{eachnews?eachnews.description:null}}
+                  </div>
+                </div>
               </div>
               <div class="columns border-bt-tp">
-                <div class="column tx-center">
-                  คนเขียน
+                <div class="column hd-w-bold tx-center">
+                  ประเภทโพสต์
                 </div>
                 <div class="column tx-center">
-                  {{ eachnews?eachnews.author.displayName:"" }}
+                  {{eachnews?eachnews.type==="article"?destinationArticle.articleType:eachnews.type:null}}
+                </div>
+              </div>
+              <div class="columns border-bt">
+                <div class="column hd-w-bold tx-center">
+                  โพสต์เมื่อ
+                </div>
+                <div class="column">
+                  <div class="dp-flex flex-center">
+                    <b-icon
+                      icon="calendar"
+                      size="30">
+                    </b-icon>
+                    <div>
+                      {{destinationArticle? convertTimestamp(destinationArticle.createdAt):null}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="columns border-bt">
+                <div class="column hd-w-bold tx-center">
+                  โพสต์โดย
                 </div>
                 <div class="column tx-center">
-                  {{ destinationArticle }}
+                  <img :src="destinationArticle?destinationArticle.author.avatarURL:null" class="img-avatar"/>
+                  <div class="hd-w-bold">{{destinationArticle?destinationArticle.author.displayName:null}}</div>
+                  <div>UserID {{destinationArticle?destinationArticle.author._id:null}}</div>
                 </div>
+              </div>
+              <div class="columns flex-center border-bt">
+                <div class="mg-14 hd-w-bold">เนื้อหาโพสต์</div>
+              </div>
+              <div class="columns">
+                {{ destinationArticle?destinationArticle.articleType==="news"?destinationArticle.title:destinationArticle.description:null }}
               </div>
             </div>
           </section>
@@ -98,10 +143,13 @@ export default {
       if( this.eachnews.type==="article" ) { 
         result = await newService.getNewsById(this.eachnews.postDestination)
       } else {
-        console.log(eachnews.type)
+        result = await newService.getComment(this.eachnews.postDestination)
       }
-      this.isLoading = false
-      this.isCardModalActive = true
+      if(result){
+        this.destinationArticle = result.data
+        this.isLoading = false
+        this.isCardModalActive = true
+      }
     },
     async deleteArticles (id) {
       this.isLoading = true
@@ -184,5 +232,11 @@ div.pd-21:hover {
 }
 .flex-item-center {
   align-items: center;
+}
+.mg-tp-25 {
+  margin-top: 25px;
+}
+.mg-14 {
+  margin: 14px;
 }
 </style>

@@ -229,11 +229,6 @@ export default {
 .margin-0-auto {
   margin:auto;
 }
-.border-bt-tp {
-  border-bottom: 0.25px solid;
-  border-top: 0.25px solid;
-  border-color: #DCDCDC;
-}
 .bg-red {
   background-color: #FFA07A;
 }
@@ -248,13 +243,6 @@ export default {
 }
 .pd-bt-10 {
   padding-bottom:10px;
-}
-.hd-w-bold {
-  font-weight: bold;
-}
-.border-bt {
-  border-bottom: 0.25px solid;
-  border-color: #DCDCDC;
 }
 .w-1 {
   width: 1px;

@@ -35,3 +35,27 @@ html {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+.pd-25 {
+    padding: 25px;
+}
+.hd-size {
+    font-size: 20px;
+}
+.hd-w-bold {
+    font-weight: bold;
+}
+.pd-tp-10 {
+    padding-top: 10px;
+}
+.border-bt {
+    border-bottom: 0.25px solid;
+    border-color: #DCDCDC;
+}
+.border-bt-tp {
+    border-bottom: 0.25px solid;
+    border-top: 0.25px solid;
+    border-color: #DCDCDC;
+}
+.flex-item-center {
+    align-items: center;
+}

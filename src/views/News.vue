@@ -57,7 +57,7 @@
                   </div>
                 </div>
               </div>
-              <div class="tx-center border-bt-tp pd-19 dp-flex flex-center flex-item-center t-height">
+              <div class="tx-center border-bt-tp pd-19 dp-flex flex-center flex-item-center">
                 {{ eachnews?eachnews.description:"" }}
               </div>
               <div class="mg-25 hd-w-bold hd-comment">
@@ -152,7 +152,7 @@ export default {
     },
     async deleteComment (id,cid) {
       this.isLoading = true
-      const data = await newservice.deleteComment(id, cid)
+      const data = await newservice.deleteComment(cid)
       this.fetchNewsById(id)
       this.isLoading = false
     }
@@ -242,25 +242,11 @@ div.pd-21:hover {
   width: 640px;
   height: 426.66px;
 }
-.pd-25 {
-  padding: 25px;
-}
-.border-bt-tp {
-  border-bottom: 0.25px solid;
-  border-top: 0.25px solid;
-  border-color: #DCDCDC;
-}
 .hd-size {
   font-size: 20px;
 }
-.hd-w-bold {
-  font-weight: bold;
-}
 .pd-19 {
   padding: 19px;
-}
-.t-height {
-  height: 170px;
 }
 .hd-comment {
   margin-top: 10px;
@@ -273,8 +259,5 @@ div.pd-21:hover {
 }
 .flex-between {
   justify-content: space-between;
-}
-.pd-tp-10 {
-  padding-top:10px;
 }
 </style>
