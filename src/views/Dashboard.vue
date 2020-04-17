@@ -226,25 +226,13 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.margin-0-auto {
-  margin:auto;
-}
-.bg-red {
-  background-color: #FFA07A;
-}
 .mg-b-15 {
   margin-bottom: 15px;
 }
 .mg-22 {
   margin: 22px;
 }
-.pd-tp-10 {
-  padding-top:10px;
-}
 .pd-bt-10 {
   padding-bottom:10px;
-}
-.w-1 {
-  width: 1px;
 }
 </style>

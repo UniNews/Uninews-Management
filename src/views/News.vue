@@ -185,79 +185,11 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.flex-wrap {
-  flex-flow: wrap;
-}
 .img-size { 
   width: 246.66px;
   height: 246.66px;
 }
-.pd-21 {
-  padding: 21px;
-}
-.tx-height {
-  height: 48px;
-}
-div.pd-21:hover {
-  border: 1px solid purple;
-}
-.mg-b-30 {
-  margin-bottom: 30px;
-}
-.mg-r-9 {
-  margin-right: 9px;
-}
-.newsTitle {
-  white-space: nowrap; 
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.bg-red {
-  background-color: #FFA07A;
-}
-.w-1 {
-  width: 1px
-}
-.img-avatar {
-  width: 120px;
-  height: 120px;
-  border-radius: 60px;
-}
-.mg-10 {
-  margin: 10px;
-}
-.mg-14 {
-  margin: 14px;
-}
-.mg-37 {
-  margin: 37px;
-}
-.flex-item-center {
-  align-items: center;
-}
 .pd-0 {
   padding: 0px;
-}
-.news-img-size {
-  width: 640px;
-  height: 426.66px;
-}
-.hd-size {
-  font-size: 20px;
-}
-.pd-19 {
-  padding: 19px;
-}
-.hd-comment {
-  margin-top: 10px;
-  margin-bottom: 10px;
-  border-left: 4px #DCDCDC solid;
-  padding-left: 10px;
-}
-.flex-item-start {
-  align-items: start;
-}
-.flex-between {
-  justify-content: space-between;
 }
 </style>
