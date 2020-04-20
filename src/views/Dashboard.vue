@@ -176,11 +176,12 @@ export default {
       this.isLoading = false;
     },
     async fetchUserById(id) {
-      this.isLoading = true;
-      const data = await userservice.getUserById(id);
-      this.user = data;
-      this.isLoading = false;
-      this.isCardModalActive = true;
+      this.$router.push({name: 'User', params: {userId: id}})
+      // this.isLoading = true;
+      // const data = await userservice.getUserById(id);
+      // this.user = data;
+      // this.isLoading = false;
+      // this.isCardModalActive = true;
     },
     async banUser(uid) {
       this.isLoading = true;
