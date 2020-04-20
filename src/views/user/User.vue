@@ -12,10 +12,7 @@
               <b-tab-item>
                 <template slot="header">
                   <b-icon icon="account-key"></b-icon>
-                  <span>
-                    User
-                    <b-tag rounded>3</b-tag>
-                  </span>
+                  <span>User</span>
                 </template>
                 <b-field label="ID">
                   <b-input disabled v-model="user._id" placeholder="ID"></b-input>
@@ -33,10 +30,7 @@
               <b-tab-item>
                 <template slot="header">
                   <b-icon icon="information-outline"></b-icon>
-                  <span>
-                    Basic information
-                    <b-tag rounded>3</b-tag>
-                  </span>
+                  <span>Basic information</span>
                 </template>
                 <b-field label="Display name">
                   <b-input v-model="user.displayName" placeholder="Display name"></b-input>
@@ -64,6 +58,26 @@
                 <div class="buttons end pt-10">
                   <b-button type="is-success" icon-right="account-check">Save</b-button>
                 </div>
+              </b-tab-item>
+              <b-tab-item>
+                <template slot="header">
+                  <b-icon icon="account-multiple"></b-icon>
+                  <span>
+                    Followings
+                    <b-tag rounded>3</b-tag>
+                  </span>
+                </template>
+                <!-- TODO: add followings table here -->
+              </b-tab-item>
+              <b-tab-item>
+                <template slot="header">
+                  <b-icon icon="account-multiple"></b-icon>
+                  <span>
+                    Followers
+                    <b-tag rounded>3</b-tag>
+                  </span>
+                </template>
+                <!-- TODO: add followers table here -->
               </b-tab-item>
             </b-tabs>
           </section>
