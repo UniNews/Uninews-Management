@@ -11,7 +11,7 @@
     <template slot="start">
       <b-navbar-item href="/#/users">Users</b-navbar-item>
       <b-navbar-item href="/#/news">News</b-navbar-item>
-      <b-navbar-item href="/#/community">Community</b-navbar-item>
+      <b-navbar-item href="/#/communities">Community</b-navbar-item>
       <b-navbar-item href="/#/report">Report</b-navbar-item>
     </template>
     <template slot="end">
