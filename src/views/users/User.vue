@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class='marginY10px' v-for='(userValue, userKey) in user' :key='userKey'>
+    <p class='marginY10px marginLeft10px' v-for='(userValue, userKey) in user' :key='userKey'>
       {{userKey}} : {{userValue}}
     </p>
   </div>
@@ -29,5 +29,8 @@ export default {
 .marginY10px {
   margin-top: 10px;
   margin-bottom: 10px;
+}
+.marginLeft10px {
+  margin-left: 10px;
 }
 </style>
