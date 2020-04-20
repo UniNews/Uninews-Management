@@ -3,12 +3,7 @@
     <div class="hero-body">
       <div class="container">
         <div class="search-size mg-l-auto">
-          <b-input
-            rounded
-            v-model="query"
-            placeholder="Search name, description..."
-            icon="magnify"
-          ></b-input>
+          <b-input rounded v-model="query" placeholder="Search name, description..." icon="magnify"></b-input>
         </div>
         <div class="card mt-20 pl-10 pr-10">
           <b-table
@@ -77,7 +72,6 @@ export default {
       this.isLoading = true;
       const data = await reportService.getAllReport();
       this.reports = data.data.reports;
-      console.log(data.data.reports);
       this.isLoading = false;
     },
     async deleteReports(id) {

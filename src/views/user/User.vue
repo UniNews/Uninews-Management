@@ -67,7 +67,7 @@
                     <b-tag rounded>{{followings.length}}</b-tag>
                   </span>
                 </template>
-                <div class="card pd-10">
+                <div class="card mt-20 pl-10 pr-10">
                   <b-table
                     :data="followings"
                     :loading="isLoading"
@@ -119,7 +119,7 @@
                     <b-tag rounded>{{followers.length}}</b-tag>
                   </span>
                 </template>
-                <div class="card pd-10">
+                <div class="card mt-20 pl-10 pr-10">
                   <b-table
                     :data="followers"
                     :loading="isLoading"
@@ -182,7 +182,7 @@ export default {
       followings: [],
       followers: [],
       activeTab: 0,
-      isLoading: false,
+      isLoading: false
     };
   },
   methods: {
@@ -195,29 +195,31 @@ export default {
       // this.$router.replace({name: 'User', params: {userId: id} });
     },
     setFollowings(users) {
-        for(let index in users) {
-          let followingsId = users[index];
-          userService.getUserById(followingsId)
-            .then(res => {
-              this.followings.push(res);
-            })
-            .catch(err => {
-              console.log(err.response);
-            })
-        }
+      for (let index in users) {
+        let followingsId = users[index];
+        userService
+          .getUserById(followingsId)
+          .then(res => {
+            this.followings.push(res);
+          })
+          .catch(err => {
+            console.log(err.response);
+          });
+      }
     },
     setFollowers(users) {
-        for(let index in users) {
-          let followersId = users[index];
-          userService.getUserById(followersId)
-            .then(res => {
-              this.followers.push(res);
-            })
-            .catch(err => {
-              console.log(err.response);
-            })
-        }
-        this.isLoading = false;
+      for (let index in users) {
+        let followersId = users[index];
+        userService
+          .getUserById(followersId)
+          .then(res => {
+            this.followers.push(res);
+          })
+          .catch(err => {
+            console.log(err.response);
+          });
+      }
+      this.isLoading = false;
     },
     setUser(userId) {
       this.isLoading = true;
