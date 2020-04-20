@@ -2,6 +2,9 @@ html {
     position: relative;
     min-height: 100%;
 }
+.pd-10 {
+    padding:10px;
+}
 .mg-40 {
     margin:40px
 }
