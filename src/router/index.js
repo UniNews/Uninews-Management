@@ -34,6 +34,11 @@ export default new Router({
       path: '/community',
       name: 'Community',
       component: () => import('../views/Community')
-    }
+    },
+    {
+      path: '/user',
+      name: 'User',
+      component: () => import('../views/users/User')
+    } 
   ]
 })
