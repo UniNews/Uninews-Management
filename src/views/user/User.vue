@@ -64,20 +64,104 @@
                   <b-icon icon="account-multiple"></b-icon>
                   <span>
                     Followings
-                    <b-tag rounded>3</b-tag>
+                    <b-tag rounded>{{followings.length}}</b-tag>
                   </span>
                 </template>
-                <!-- TODO: add followings table here -->
+                <div class="card pd-10">
+                  <b-table
+                    :data="followings"
+                    :loading="isLoading"
+                    ref="table"
+                    paginated
+                    per-page="10"
+                    aria-next-label="Next page"
+                    aria-previous-label="Previous page"
+                    aria-page-label="Page"
+                    aria-current-label="Current page"
+                  >
+                    <template slot-scope="props">
+                      <b-table-column field="id" label="ID" numeric width="10" centered>
+                        <b-tag>{{ props.row._id }}</b-tag>
+                      </b-table-column>
+                      <b-table-column
+                        width="500"
+                        field="displayName"
+                        label="Name"
+                        sortable
+                      >{{ props.row.displayName }}</b-table-column>
+                      <b-table-column sortable field="role" label="Role">{{ props.row.role }}</b-table-column>
+                      <b-table-column
+                        sortable
+                        field="createdAt"
+                        label="Date"
+                      >{{ new Date(props.row.createdAt).toLocaleDateString() }}</b-table-column>
+                      <b-table-column sortable field="active" label="Status">
+                        <b-tag
+                          :class="activeTag(props.row.active)"
+                        >{{props.row.active ? 'activated' : 'banned'}}</b-tag>
+                      </b-table-column>
+                      <b-table-column label="Detail">
+                        <b-button @click="detailClicked(props.row._id)">
+                          <span>
+                            <b-icon icon="account-search" size="25"></b-icon>
+                          </span>
+                        </b-button>
+                      </b-table-column>
+                    </template>
+                  </b-table>
+                </div>
               </b-tab-item>
               <b-tab-item>
                 <template slot="header">
                   <b-icon icon="account-multiple"></b-icon>
                   <span>
                     Followers
-                    <b-tag rounded>3</b-tag>
+                    <b-tag rounded>{{followers.length}}</b-tag>
                   </span>
                 </template>
-                <!-- TODO: add followers table here -->
+                <div class="card pd-10">
+                  <b-table
+                    :data="followers"
+                    :loading="isLoading"
+                    ref="table"
+                    paginated
+                    per-page="10"
+                    aria-next-label="Next page"
+                    aria-previous-label="Previous page"
+                    aria-page-label="Page"
+                    aria-current-label="Current page"
+                  >
+                    <template slot-scope="props">
+                      <b-table-column field="id" label="ID" numeric width="10" centered>
+                        <b-tag>{{ props.row._id }}</b-tag>
+                      </b-table-column>
+                      <b-table-column
+                        width="500"
+                        field="displayName"
+                        label="Name"
+                        sortable
+                      >{{ props.row.displayName }}</b-table-column>
+                      <b-table-column sortable field="role" label="Role">{{ props.row.role }}</b-table-column>
+                      <b-table-column
+                        sortable
+                        field="createdAt"
+                        label="Date"
+                      >{{ new Date(props.row.createdAt).toLocaleDateString() }}</b-table-column>
+                      <b-table-column sortable field="active" label="Status">
+                        <b-tag
+                          :class="activeTag(props.row.active)"
+                        >{{props.row.active ? 'activated' : 'banned'}}</b-tag>
+                      </b-table-column>
+                      <b-table-column label="Detail">
+                        <b-button @click="detailClicked(props.row._id)">
+                          <span>
+                            <b-icon icon="account-search" size="25"></b-icon>
+                          </span>
+                        </b-button>
+                      </b-table-column>
+                    </template>
+                  </b-table>
+                </div>
               </b-tab-item>
             </b-tabs>
           </section>
@@ -94,10 +178,62 @@ import { convertTimestamptoDate } from "@/assets/javascript/date";
 export default {
   data() {
     return {
-      user: {}
+      user: {},
+      followings: [],
+      followers: [],
+      activeTab: 0,
+      isLoading: false,
     };
   },
-  methods: {},
+  methods: {
+    activeTag(isActive) {
+      if (isActive) return "is-success";
+      else return "is-danger";
+    },
+    detailClicked(id) {
+      this.setUser(id);
+      // this.$router.replace({name: 'User', params: {userId: id} });
+    },
+    setFollowings(users) {
+        for(let index in users) {
+          let followingsId = users[index];
+          userService.getUserById(followingsId)
+            .then(res => {
+              this.followings.push(res);
+            })
+            .catch(err => {
+              console.log(err.response);
+            })
+        }
+    },
+    setFollowers(users) {
+        for(let index in users) {
+          let followersId = users[index];
+          userService.getUserById(followersId)
+            .then(res => {
+              this.followers.push(res);
+            })
+            .catch(err => {
+              console.log(err.response);
+            })
+        }
+        this.isLoading = false;
+    },
+    setUser(userId) {
+      this.isLoading = true;
+      this.resetUser();
+      userService.getUserById(userId).then(res => {
+        this.user = { ...res };
+        this.setFollowings(this.user.followings);
+        this.setFollowers(this.user.followers);
+      });
+    },
+    resetUser() {
+      this.user = {};
+      this.followings = [];
+      this.followers = [];
+    }
+  },
   computed: {
     createdAt: {
       get() {
@@ -107,9 +243,7 @@ export default {
     }
   },
   mounted() {
-    userService.getUserById(this.$route.params.userId).then(res => {
-      this.user = { ...res };
-    });
+    this.setUser(this.$route.params.userId);
   }
 };
 </script>
