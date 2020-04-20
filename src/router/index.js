@@ -18,12 +18,12 @@ export default new Router({
     {
       path: '/news',
       name: 'News',
-      component: () => import('../views/News')
+      component: () => import('../views/news/News')
     },
     {
-      path: '/news',
+      path: '/newsdetail',
       name: 'NewsDetail',
-      component: () => import('../views/News')
+      component: () => import('../views/news/NewsDetail')
     },
     {
       path: '/report',
@@ -33,7 +33,12 @@ export default new Router({
     {
       path: '/community',
       name: 'Community',
-      component: () => import('../views/Community')
-    }
+      component: () => import('../views/community/Community')
+    },
+    {
+      path: '/communities',
+      name: 'Communities',
+      component: () => import('../views/community/Communities')
+    },
   ]
 })
