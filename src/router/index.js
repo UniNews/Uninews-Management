@@ -11,9 +11,9 @@ export default new Router({
       component: () => import('../views/Login')
     },
     {
-      path: '/',
-      name: 'Dashboard',
-      component: () => import('../views/Dashboard')
+      path: '/users',
+      name: 'Users',
+      component: () => import('../views/user/Users')
     },
     {
       path: '/news',
@@ -40,5 +40,10 @@ export default new Router({
       name: 'Communities',
       component: () => import('../views/community/Communities')
     },
+    {
+      path: '/user',
+      name: 'User',
+      component: () => import('../views/user/User')
+    }
   ]
 })
