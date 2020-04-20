@@ -1,18 +1,14 @@
+
 <template>
   <section class="hero is-small">
     <div class="hero-body">
       <div class="container">
-        <div class="search-size mg-l-auto">
-          <b-input
-            rounded
-            v-model="query"
-            placeholder="Search name, description..."
-            icon="magnify"
-          ></b-input>
+        <div class="search-size">
+          <b-input rounded v-model="query" placeholder="Search name, description..." icon="magnify"></b-input>
         </div>
         <div class="card mt-20 pl-10 pr-10">
           <b-table
-            :data="filterReports"
+            :data="filterNews"
             ref="table"
             paginated
             per-page="10"
@@ -27,7 +23,7 @@
               </b-table-column>
               <b-table-column
                 field="author.displayName"
-                label="Reporter"
+                label="Author"
                 sortable
               >{{ props.row.author.displayName }}</b-table-column>
               <b-table-column
@@ -40,11 +36,9 @@
                 field="createdAt"
                 label="Date"
               >{{ new Date(props.row.createdAt).toLocaleDateString() }}</b-table-column>
-              <b-table-column sortable field="type" label="Status">
-                <b-tag :class="reportType(props.row.type)">{{props.row.type}}</b-tag>
-              </b-table-column>
+
               <b-table-column label="Detail">
-                <b-button>
+                <b-button @click="newsClicked(props.row._id)">
                   <span>
                     <b-icon icon="account-search" size="25"></b-icon>
                   </span>
@@ -61,53 +55,77 @@
 
 <script>
 import { mapActions } from "vuex";
-import reportService from "@/services/reportservice";
-import newService from "@/services/newservice";
+import newservice from "@/services/newservice";
+import { convertTimestamptoDate } from "@/assets/javascript/date";
 export default {
-  name: "Report",
+  name: "Community",
   data() {
     return {
-      reports: [],
+      news: [],
       query: "",
-      isLoading: false
+      isLoading: false,
+      eachnews: null,
+      isCardModalActive: false,
+      comments: []
     };
   },
   methods: {
-    async fetchReports() {
+    async fetchNews() {
       this.isLoading = true;
-      const data = await reportService.getAllReport();
-      this.reports = data.data.reports;
-      console.log(data.data.reports);
+      const data = await newservice.getAllCommunity();
+      this.news = data.data.articles;
       this.isLoading = false;
     },
-    async deleteReports(id) {
+    convertTimestamp(value) {
+      return convertTimestamptoDate(value);
+    },
+    async fetchNewsById(id) {
       this.isLoading = true;
-      const data = await reportService.deleteReportById(id);
-      this.fetchReports();
+      const data = await newservice.getNewsById(id);
+      const data2 = await newservice.getCommentsById(id);
+      this.eachnews = data.data;
+      this.comments = data2.data;
+      this.isLoading = false;
+      this.isCardModalActive = true;
+    },
+    async deleteArticles(id) {
+      this.isLoading = true;
+      const data = await newservice.deleteArticles(id);
+      this.isCardModalActive = false;
+      this.fetchNews();
       this.isLoading = false;
     },
-    reportType(type) {
-      if (type === "article") return "is-info";
+    async deleteComment(id, cid) {
+      this.isLoading = true;
+      const data = await newservice.deleteComment(cid);
+      this.fetchNewsById(id);
+      this.isLoading = false;
+    },
+    newsType(num) {
+      if (num <= 0) return "is-info";
       else return "is-warning";
+    },
+    newsClicked(id) {
+      this.$router.push({ name: "Community", params: { newsId: id } });
     }
   },
   mounted() {
-    this.fetchReports();
+    this.fetchNews();
   },
   computed: {
-    filterReports() {
-      if (this.query !== "") {
-        return this.reports.filter(item => {
-          return (
-            item.description.toLowerCase().match(this.query.toLowerCase()) ||
-            (item.author
-              ? item.author.displayName
-                  .toLowerCase()
-                  .match(this.query.toLowerCase())
-              : false)
+    filterNews() {
+      return this.news.filter(item => {
+        if (this.query !== "") {
+          return `${item.author.displayName.toLowerCase()}${item.description.toLowerCase()}`.match(
+            this.query.toLowerCase()
           );
-        });
-      } else return this.reports;
+        } else return this.news;
+      });
+    },
+    displayCard() {
+      return this.isCardModalActive
+        ? "modal is-active modal-background"
+        : "modal modal-background";
     }
   }
 };

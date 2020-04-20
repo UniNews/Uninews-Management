@@ -5,7 +5,7 @@
         <div class="pd-25 search-size mg-l-auto">
           <b-input rounded v-model="query" placeholder="Search name" icon="magnify"></b-input>
         </div>
-        <div class="card pd-10">
+        <div class="card mt-20 pl-10 pr-10">
           <b-table
             :data="filterUser"
             ref="table"
