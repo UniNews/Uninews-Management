@@ -40,13 +40,12 @@
                     ref="taginput"
                     icon="label"
                     placeholder="Add a tag"
-                    @typing="getFilteredTags">
+                    @typing="getFilteredTags"
+                  >
                     <template slot-scope="props">
                       <strong>{{props.option}}</strong>
                     </template>
-                    <template slot="empty">
-                      There are no items
-                    </template>
+                    <template slot="empty">There are no items</template>
                     <template slot="selected" slot-scope="props">
                       <b-tag
                         v-for="(tag, index) in props.tags"
@@ -56,9 +55,8 @@
                         :tabstop="false"
                         ellipsis
                         closable
-                        @close="$refs.taginput.removeTag(index, $event)">
-                        {{tag}}
-                      </b-tag>
+                        @close="$refs.taginput.removeTag(index, $event)"
+                      >{{tag}}</b-tag>
                     </template>
                   </b-taginput>
                 </b-field>
@@ -227,7 +225,11 @@
                         label="Name"
                         sortable
                       >{{ props.row.author.displayName }}</b-table-column>
-                      <b-table-column sortable field="description" label="Description">{{ props.row.description }}</b-table-column>
+                      <b-table-column
+                        sortable
+                        field="description"
+                        label="Description"
+                      >{{ props.row.description }}</b-table-column>
                       <b-table-column
                         sortable
                         field="createdAt"
@@ -241,10 +243,11 @@
                         </b-button>
                       </b-table-column>
                       <b-table-column>
-                        <b-button type="is-danger" @click="deleteComment(props.row._id)"
-                          icon-left="delete">
-                          Delete
-                        </b-button>
+                        <b-button
+                          type="is-danger"
+                          @click="deleteComment(props.row._id)"
+                          icon-left="delete"
+                        >Delete</b-button>
                       </b-table-column>
                     </template>
                     <template slot="empty">
@@ -272,7 +275,15 @@
 import newsService from "../../services/newservice";
 import { convertTimestamptoDate } from "@/assets/javascript/date";
 
-const data = ['ทั่วไป', 'ความรัก', 'การเรียน', 'กีฬา', 'เตือนภัย', 'รีวิว', 'อาหาร']
+const data = [
+  "ทั่วไป",
+  "ความรัก",
+  "การเรียน",
+  "กีฬา",
+  "เตือนภัย",
+  "รีวิว",
+  "อาหาร"
+];
 
 export default {
   data() {
@@ -281,18 +292,18 @@ export default {
       activeTab: 0,
 
       filteredTags: data,
-      isLoading:false,
-      views:[],
-      likes:[],
-      comments:[]
+      isLoading: false,
+      views: [],
+      likes: [],
+      comments: []
     };
   },
   mounted() {
     this.newsId = this.$route.params.newsId;
-    if(this.newsId!==undefined) {
-      this.fetchNews()
+    if (this.newsId !== undefined) {
+      this.fetchNews();
     } else {
-      this.$router.push('/news')
+      this.$router.push("/news");
     }
   },
   computed: {
@@ -305,47 +316,52 @@ export default {
   },
   methods: {
     getFilteredTags(text) {
-      this.filteredTags = data.filter((option) => {
-        return option
-          .toString()
-          .toLowerCase()
-          .indexOf(text.toLowerCase()) >= 0
-      })
+      this.filteredTags = data.filter(option => {
+        return (
+          option
+            .toString()
+            .toLowerCase()
+            .indexOf(text.toLowerCase()) >= 0
+        );
+      });
     },
     activeTag(isActive) {
       if (isActive) return "is-success";
       else return "is-danger";
     },
     detailClicked(id) {
-      this.$router.push({ name: "User", params: { userId: id } })
+      this.$router.push({ name: "User", params: { userId: id } });
     },
     async deleteComment(id) {
-      this.isLoading = true
-      await newsService.deleteComment(id)
-      this.fetchNews()
-      this.isLoading = false
+      this.isLoading = true;
+      await newsService.deleteComment(id);
+      this.fetchNews();
+      this.isLoading = false;
     },
     async fetchNews() {
-      const result = await newsService.getNewsById(this.newsId)
-      this.news = { ...result.data }
-      const result1 = await newsService.getViewsById(this.newsId)
-      this.views = [ ...result1.data ]
-      const result2 = await newsService.getLikesById(this.newsId)
-      this.likes = [ ...result2.data ]
-      const result3 = await newsService.getCommentsById(this.newsId)
-      this.comments = [ ...result3.data ]
+      const result = await newsService.getNewsById(this.newsId);
+      this.news = { ...result.data };
+      const result1 = await newsService.getViewsById(this.newsId);
+      this.views = [...result1.data];
+      const result2 = await newsService.getLikesById(this.newsId);
+      this.likes = [...result2.data];
+      const result3 = await newsService.getCommentsById(this.newsId);
+      this.comments = [...result3.data];
     },
-    async putNews(news) { 
-      const { title , tags, description , newsType, _id } = news
-      this.isLoading=true
-      await newsService.putArticles({
-        'title': title,
-        'newsType': newsType,
-        'tags': [...tags],
-        'description': description
-      }, _id)
-      this.$router.push('/news')
-      this.isLoading=false
+    async putNews(news) {
+      const { title, tags, description, newsType, _id } = news;
+      this.isLoading = true;
+      await newsService.putArticles(
+        {
+          title: title,
+          newsType: newsType,
+          tags: [...tags],
+          description: description
+        },
+        _id
+      );
+      this.$router.push("/news");
+      this.isLoading = false;
     }
   }
 };

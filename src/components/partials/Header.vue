@@ -16,9 +16,9 @@
     </template>
     <template slot="end">
       <b-navbar-item tag="div">
-        <div v-if="$route.name !== 'Login'">
-          <img :src="getUser()?getUser().avatarURL:null" class="image-avatar" />
-          {{ getUser()?getUser().displayName:null }}
+        <div class="columns" v-if="$route.name !== 'Login'">
+          <img :src="getUser().avatarURL" class="image-avatar mr-5" />
+          <p>{{ getUser().displayName }}</p>
         </div>
       </b-navbar-item>
       <b-navbar-item tag="div">
@@ -47,7 +47,9 @@ export default {
 </script>
 <style scoped>
 .image-avatar {
-  margin: -6px;
-  border-radius: 22px;
+  height: 35px;
+  width: 35px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 </style>
