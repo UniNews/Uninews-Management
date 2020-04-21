@@ -31,6 +31,16 @@
                 field="description"
                 label="Description"
               >{{ props.row.description }}</b-table-column>
+              <b-table-column field="tags" label="Tags">
+                <div v-if="props.row.tags && props.row.tags.length > 0">
+                  <b-tag
+                    type="is-primary"
+                    :key="index"
+                    v-for="(tag, index) in props.row.tags"
+                    rounded
+                  >{{tag}}</b-tag>
+                </div>
+              </b-table-column>
               <b-table-column
                 sortable
                 field="createdAt"

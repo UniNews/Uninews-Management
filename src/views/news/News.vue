@@ -53,7 +53,7 @@
             <template slot="detail" slot-scope="props">
               <article class="media">
                 <figure class="media-left">
-                  <p class="image is-128x128">
+                  <p class="image is-64x64">
                     <img :src="props.row.imageURL" />
                   </p>
                 </figure>
@@ -61,6 +61,12 @@
                   <div class="content">
                     <p>{{ props.row.description }}</p>
                   </div>
+                  <b-tag
+                    type="is-primary"
+                    :key="index"
+                    v-for="(tag, index) in props.row.tags"
+                    rounded
+                  >{{tag}}</b-tag>
                 </div>
               </article>
             </template>

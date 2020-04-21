@@ -31,6 +31,7 @@
                   </span>
                 </template>
               </b-tab-item>
+              <!-- TODO: ประกอบไปด้วย users table -->
               <b-tab-item>
                 <template slot="header">
                   <b-icon icon="account-multiple"></b-icon>
@@ -49,6 +50,7 @@
                   </span>
                 </template>
               </b-tab-item>
+              <!-- TODO: ประกอบไปด้วย users table -->
             </b-tabs>
           </section>
         </div>
