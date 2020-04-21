@@ -44,6 +44,6 @@ export default new Router({
       path: '/communities',
       name: 'Communities',
       component: () => import('../views/community/Communities')
-    },
+    }
   ]
 })
