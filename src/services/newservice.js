@@ -45,5 +45,11 @@ export default {
     getLikesById: (id) => {
         const data = axios.get(`${API_URL}/articles/${id}/likes`)
         return data
+    },
+    putArticles: (json,id) => {
+        const data = axios.put(`${API_URL}/articles/${id}`, json, {
+            headers: { 'Content-Type': 'application/json' }
+        })
+        return data
     }
 }

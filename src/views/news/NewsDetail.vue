@@ -34,7 +34,7 @@
                 </b-field>
                 <b-field label="Tags">
                   <b-taginput
-                    v-model="tags"
+                    v-model="news.tags"
                     :data="filteredTags"
                     autocomplete
                     ref="taginput"
@@ -68,6 +68,9 @@
                 <b-field label="Description">
                   <b-input type="textarea" v-model="news.description" placeholder="Description"></b-input>
                 </b-field>
+                <div class="buttons end pt-10">
+                  <b-button type="is-success" @click="putNews(news)" icon-right="check">Save</b-button>
+                </div>
               </b-tab-item>
               <b-tab-item>
                 <template slot="header">
@@ -276,7 +279,6 @@ export default {
     return {
       news: {},
       activeTab: 0,
-      tags:[],
       filteredTags: data,
       isLoading:false,
       views:[],
@@ -322,7 +324,7 @@ export default {
       this.fetchNews()
       this.isLoading = false
     },
-    async fetchNews(){
+    async fetchNews() {
       const result = await newsService.getNewsById(this.newsId)
       this.news = { ...result.data }
       const result1 = await newsService.getViewsById(this.newsId)
@@ -331,6 +333,18 @@ export default {
       this.likes = [ ...result2.data ]
       const result3 = await newsService.getCommentsById(this.newsId)
       this.comments = [ ...result3.data ]
+    },
+    async putNews(news) { 
+      const { title , tags, description , newsType, _id } = news
+      this.isLoading=true
+      await newsService.putArticles({
+        'title': title,
+        'newsType': newsType,
+        'tags': [...tags],
+        'description': description
+      }, _id)
+      this.fetchNews()
+      this.isLoading=false
     }
   }
 };
