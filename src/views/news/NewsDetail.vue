@@ -279,6 +279,7 @@ export default {
     return {
       news: {},
       activeTab: 0,
+
       filteredTags: data,
       isLoading:false,
       views:[],
@@ -343,7 +344,7 @@ export default {
         'tags': [...tags],
         'description': description
       }, _id)
-      this.fetchNews()
+      this.$router.push('/news')
       this.isLoading=false
     }
   }
