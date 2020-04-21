@@ -21,7 +21,7 @@
                   <b-input disabled v-model="user.role" placeholder="Role"></b-input>
                 </b-field>
                 <b-field label="Active">
-                  <b-switch :value="user.active" type="is-success"></b-switch>
+                  <b-switch :value="user.active" @input="editUserRole(user)" type="is-success"></b-switch>
                 </b-field>
                 <b-field label="Created date">
                   <b-input disabled v-model="createdAt" placeholder="Created at"></b-input>
@@ -56,7 +56,7 @@
                   </b-field>
                 </div>
                 <div class="buttons end pt-10">
-                  <b-button type="is-success" icon-right="account-check">Save</b-button>
+                  <b-button type="is-success" @click="putUser(user)" icon-right="account-check">Save</b-button>
                 </div>
               </b-tab-item>
               <b-tab-item>
@@ -254,6 +254,27 @@ export default {
       this.user = {};
       this.followings = [];
       this.followers = [];
+    },
+    async putUser(user) {
+      const { displayName, bio, _id } = user
+      this.isLoading=true
+      await userService.putUser({
+        'displayName':displayName,
+        'bio':bio
+      },_id)
+      this.setUser(this.$route.params.userId)
+      this.isLoading=false
+    },
+    async editUserRole(user) {
+      const { active, _id } = user
+      this.isLoading=true
+      if(active) {
+        await userService.banUser(_id)
+      }else {
+        await userService.unBanUser(_id)
+      }
+      this.setUser(this.$route.params.userId)
+      this.isLoading=false
     }
   },
   computed: {
@@ -265,7 +286,11 @@ export default {
     }
   },
   mounted() {
-    this.setUser(this.$route.params.userId);
+    const userId = this.$route.params.userId
+    if(userId!==undefined)
+      this.setUser(this.$route.params.userId);
+    else
+      this.$router.push('/users')
   }
 };
 </script>

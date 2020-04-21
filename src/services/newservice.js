@@ -33,5 +33,23 @@ export default {
     getComment:(id)=> {
         const data = axios.get(`${API_URL}/comments/${id}`)
         return data
+    },
+    getViewsById: (id) => {
+        const data = axios.get(`${API_URL}/articles/${id}/views`)
+        return data
+    },
+    getViewsById: (id) => {
+        const data = axios.get(`${API_URL}/articles/${id}/views`)
+        return data
+    },
+    getLikesById: (id) => {
+        const data = axios.get(`${API_URL}/articles/${id}/likes`)
+        return data
+    },
+    putArticles: (json,id) => {
+        const data = axios.put(`${API_URL}/articles/${id}`, json, {
+            headers: { 'Content-Type': 'application/json' }
+        })
+        return data
     }
 }
