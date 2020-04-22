@@ -2,7 +2,7 @@
   <div>
     <Header v-if="$route.name !== 'Login'" @logout="logout" />
       <router-view></router-view>
-    <Footer v-if="$route.name !== 'Login'" @postArticles="postArticles"/>
+    <Footer v-if="$route.name !== 'Login'"/>
     <b-loading :is-full-page="true" :active.sync="isLoading"/>
   </div>
 </template>
@@ -36,11 +36,6 @@ export default {
         const logoutStatus = await this.userLogout()
         this.$router.push('/login')
       }
-    },
-    async postArticles (event) {
-      this.isLoading=true
-      await newsService.postNews(event)
-      this.isLoading=false
     }
   },
   mounted(){

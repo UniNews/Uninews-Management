@@ -44,6 +44,11 @@ export default new Router({
       path: '/communities',
       name: 'Communities',
       component: () => import('../views/community/Communities')
+    },
+    {
+      path: '/postnews',
+      name: 'PostNews',
+      component: () => import('../views/PostNews')
     }
   ]
 })
