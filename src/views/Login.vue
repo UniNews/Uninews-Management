@@ -1,20 +1,25 @@
 <template>
-  <div>
-    <div v-if="!isAuthenticated">
-      <h1>Sign in</h1>
-      <p>
-        <router-link :to="{ name: 'register' }">Need an account?</router-link>
-      </p>
-      <form v-on:submit.prevent="onSubmit(username, password);">
-        <input type="text" v-model="username" placeholder="Username" />
-        <input type="password" v-model="password" placeholder="Password" />
-        <button>Sign in</button>
-      </form>
+  <section class="hero is-large">
+    <div class="hero-body">
+      <div class="container">
+        <div class="card card-width margin-auto card-padding">
+          <b-field label="Username">
+            <b-input v-model="username"></b-input>
+          </b-field>
+          <b-field label="Password">
+            <b-input type="password" v-model="password"></b-input>
+          </b-field>
+          <div class="dp-flex flex-center">
+            <button
+              class="button is-success is-outlined"
+              v-on:click="onSubmit(username,password)"
+            >Login</button>
+          </div>
+        </div>
+      </div>
     </div>
-    <div v-else>
-      <h1>Logged in</h1>
-    </div>
-  </div>
+    <b-loading :is-full-page="true" :active.sync="isLoading" />
+  </section>
 </template>
 
 <script>
@@ -25,24 +30,37 @@ export default {
   data() {
     return {
       username: null,
-      password: null
+      password: null,
+      isLoading: false
     };
   },
   methods: {
     ...mapActions({
-      login:'Auth/login'
+      login: "Auth/login",
+      autoLogin: "Auth/autoLogin"
     }),
-    onSubmit(username, password) {
+    async onSubmit(username, password) {
+      this.isLoading = true;
       const auth = {
         username: this.username,
         password: this.password
+      };
+      const result = await this.login(auth);
+      this.isLoading = false;
+      if (this.isAuthenticated) {
+        this.$router.push("/");
       }
-      this.login(auth)
+    }
+  },
+  mounted() {
+    if (this.isAuthenticated) {
+      this.autoLogin();
+      this.$router.push("/");
     }
   },
   computed: {
     ...mapGetters({
-      isAuthenticated:'Auth/isAuthenticated'
+      isAuthenticated: "Auth/isAuthenticated"
     })
   }
 };
@@ -50,4 +68,13 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.card-width {
+  max-width: 33.3%;
+}
+.margin-auto {
+  margin: auto;
+}
+.card-padding {
+  padding: 15px;
+}
 </style>
