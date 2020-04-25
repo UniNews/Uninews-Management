@@ -24,7 +24,7 @@
                 field="author.displayName"
                 label="Reporter"
                 sortable
-              >{{ props.row.author.displayName }}</b-table-column>
+              >{{ props.row.author?props.row.author.displayName:"" }}</b-table-column>
               <b-table-column
                 sortable
                 field="description"
@@ -71,7 +71,8 @@ export default {
     async fetchReports() {
       this.isLoading = true;
       const data = await reportService.getAllReport();
-      this.reports = data.data.reports;
+      this.reports = data.data.reports
+      console.log(this.reports)
       this.isLoading = false;
     },
     async deleteReports(id) {

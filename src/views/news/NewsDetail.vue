@@ -30,7 +30,7 @@
                   <span>Basic information</span>
                 </template>
                 <b-field label="Type">
-                  <b-input v-model="news.newsType" placeholder="ID"></b-input>
+                  <b-input v-model="news.newsType" placeholder="Type"></b-input>
                 </b-field>
                 <b-field label="Tags">
                   <b-taginput
