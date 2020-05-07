@@ -1,7 +1,7 @@
 <template>
   <b-navbar>
     <template slot="brand">
-      <b-navbar-item tag="router-link" :to="{ path: '/' }">
+      <b-navbar-item tag="router-link" :to="{ path: '/news' }">
         <img
           src="https://raw.githubusercontent.com/buefy/buefy/dev/static/img/buefy-logo.png"
           alt="Lightweight UI components for Vue.js based on Bulma"
@@ -12,18 +12,17 @@
       <b-navbar-item href="/#/users">Users</b-navbar-item>
       <b-navbar-item href="/#/news">News</b-navbar-item>
       <b-navbar-item href="/#/communities">Communities</b-navbar-item>
-      <b-navbar-item href="/#/report">Report</b-navbar-item>
+      <b-navbar-item href="/#/reports">Reports</b-navbar-item>
     </template>
-    <template slot="end">
-      <b-navbar-item tag="div">
-        <div class="columns" v-if="$route.name !== 'Login'">
-          <img :src="getUser().avatarURL" class="image-avatar mr-5" />
-          <p>{{ getUser().displayName }}</p>
+    <template v-if="this.user !== null" slot="end">
+      <b-navbar-item class="profile-nav" tag="div">
+        <div class="profile" @click="profileClicked()">
+          <span>{{ user.displayName }}</span>
         </div>
       </b-navbar-item>
       <b-navbar-item tag="div">
-        <div v-if="$route.name !== 'Login'" class="buttons">
-          <a class="button is-light" @click="logout()">Logout</a>
+        <div class="buttons">
+          <a class="button is-primary" outlined @click="logout()">Logout</a>
         </div>
       </b-navbar-item>
     </template>
@@ -32,24 +31,33 @@
 
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 export default {
   name: "Header",
   methods: {
-    logout() {
-      this.$emit("logout", true);
+    ...mapActions({
+      userLogout: "Auth/logout"
+    }),
+    async logout() {
+      await this.userLogout();
+      this.$router.push("/login");
     },
+    profileClicked() {
+      this.$router.push("/myUser");
+    }
+  },
+  computed: {
     ...mapGetters({
-      getUser: "Auth/getUser"
+      user: "Auth/getUser"
     })
   }
 };
 </script>
 <style scoped>
-.image-avatar {
-  height: 35px;
-  width: 35px;
-  border-radius: 50%;
-  object-fit: cover;
+.profile-nav {
+  cursor: pointer;
+}
+.profile-nav:hover {
+  background-color: rgb(250, 250, 250);
 }
 </style>

@@ -24,7 +24,6 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-
 export default {
   name: "Login",
   data() {
@@ -34,10 +33,14 @@ export default {
       isLoading: false
     };
   },
+  watch: {
+    user: function(value) {
+      if (value) this.$router.push("/");
+    }
+  },
   methods: {
     ...mapActions({
-      login: "Auth/login",
-      autoLogin: "Auth/autoLogin"
+      login: "Auth/login"
     }),
     async onSubmit(username, password) {
       this.isLoading = true;
@@ -47,20 +50,11 @@ export default {
       };
       const result = await this.login(auth);
       this.isLoading = false;
-      if (this.isAuthenticated) {
-        this.$router.push("/");
-      }
-    }
-  },
-  mounted() {
-    if (this.isAuthenticated) {
-      this.autoLogin();
-      this.$router.push("/");
     }
   },
   computed: {
     ...mapGetters({
-      isAuthenticated: "Auth/isAuthenticated"
+      user: "Auth/getUser"
     })
   }
 };

@@ -1,14 +1,13 @@
-
 <template>
   <div>
     <div v-if="isLoading">
       <b-loading :is-full-page="true" :active.sync="isLoading" />
     </div>
-    <div v-else>
+    <div>
       <section class="hero is-small">
         <div class="hero-body">
           <div class="container">
-            <div class="search-size">
+            <div class="search-size mg-l-auto">
               <b-input
                 rounded
                 v-model="query"
@@ -18,7 +17,7 @@
             </div>
             <div class="card mt-20 pl-10 pr-10">
               <b-table
-                :data="filterNews"
+                :data="filterReports"
                 ref="table"
                 paginated
                 per-page="10"
@@ -33,34 +32,26 @@
                   </b-table-column>
                   <b-table-column
                     field="author.displayName"
-                    label="Author"
+                    label="Reporter"
                     sortable
-                  >{{ props.row.author.displayName }}</b-table-column>
+                  >{{ props.row.author?props.row.author.displayName:"" }}</b-table-column>
                   <b-table-column
                     sortable
                     field="description"
                     label="Description"
                   >{{ props.row.description }}</b-table-column>
-                  <b-table-column field="tags" label="Tags">
-                    <div v-if="props.row.tags && props.row.tags.length > 0">
-                      <b-tag
-                        type="is-primary"
-                        :key="index"
-                        v-for="(tag, index) in props.row.tags"
-                        rounded
-                      >{{tag}}</b-tag>
-                    </div>
-                  </b-table-column>
                   <b-table-column
                     sortable
                     field="createdAt"
                     label="Date"
                   >{{ new Date(props.row.createdAt).toLocaleDateString() }}</b-table-column>
-
+                  <b-table-column sortable field="type" label="Type">
+                    <b-tag :class="reportType(props.row.type)">{{props.row.type}}</b-tag>
+                  </b-table-column>
                   <b-table-column label="Detail">
-                    <b-button @click="newsClicked(props.row._id)">
+                    <b-button @click="goReport(props.row)">
                       <span>
-                        <b-icon icon="account-search" size="25"></b-icon>
+                        <b-icon icon="database-search" size="25"></b-icon>
                       </span>
                     </b-button>
                   </b-table-column>
@@ -77,55 +68,54 @@
 
 <script>
 import { mapActions } from "vuex";
-import newservice from "@/services/newservice";
-import { convertTimestamptoDate } from "@/assets/javascript/date";
+import reportService from "@/services/reportservice";
+import newService from "@/services/newservice";
 export default {
-  name: "Community",
+  name: "Report",
   data() {
     return {
-      news: [],
+      reports: [],
       query: "",
-      isLoading: false,
-      eachnews: null,
-      isCardModalActive: false,
-      comments: []
+      isLoading: false
     };
   },
   methods: {
-    async fetchNews() {
-      this.isLoading = true;
-      const data = await newservice.getAllCommunity();
-      this.news = data.data.articles;
-      this.isLoading = false;
+    async fetchReports() {
+      const response = await reportService.getAllReport();
+      this.reports = response.data.reports;
     },
-    convertTimestamp(value) {
-      return convertTimestamptoDate(value);
+    reportType(type) {
+      if (type === "article") return "is-info";
+      else return "is-warning";
     },
-    async fetchNewsById(id) {
-      this.isLoading = true;
-      const data = await newservice.getNewsById(id);
-      const data2 = await newservice.getCommentsById(id);
-      this.eachnews = data.data;
-      this.comments = data2.data;
-      this.isLoading = false;
-      this.isCardModalActive = true;
-    },
-    newsClicked(id) {
-      this.$router.push({ name: "Community", params: { newsId: id } });
+    goReport(report) {
+      if (report.type === "article") {
+        this.$router.push({
+          name: "ArticleReport",
+          params: { articleId: report.postDestination }
+        });
+      }
     }
   },
-  mounted() {
-    this.fetchNews();
+  async mounted() {
+    this.isLoading = true;
+    await this.fetchReports();
+    this.isLoading = false;
   },
   computed: {
-    filterNews() {
-      return this.news.filter(item => {
-        if (this.query !== "") {
-          return `${item.author.displayName.toLowerCase()}${item.description.toLowerCase()}`.match(
-            this.query.toLowerCase()
+    filterReports() {
+      if (this.query !== "") {
+        return this.reports.filter(item => {
+          return (
+            item.description.toLowerCase().match(this.query.toLowerCase()) ||
+            (item.author
+              ? item.author.displayName
+                  .toLowerCase()
+                  .match(this.query.toLowerCase())
+              : false)
           );
-        } else return this.news;
-      });
+        });
+      } else return this.reports;
     }
   }
 };

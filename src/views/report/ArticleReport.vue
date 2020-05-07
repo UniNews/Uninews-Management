@@ -1,10 +1,13 @@
 <template>
   <div>
-    <div v-if="isLoading">
+    <div v-if="isLoading || !news">
       <b-loading :is-full-page="true" :active.sync="isLoading" />
     </div>
     <div v-else class="container mb-20 mt-20">
       <div class="card">
+        <div class="card-image is-centered columns pt-20">
+          <img class="news-image shadow" :src="news.imageURL" />
+        </div>
         <div class="card-content">
           <div class="content">
             <section>
@@ -14,6 +17,7 @@
                     <b-icon icon="newspaper"></b-icon>
                     <span>News</span>
                   </template>
+                  <!-- TODO: ประกอบไปด้วย _id, author, createdAt -->
                   <b-field label="ID">
                     <b-input disabled v-model="news._id" placeholder="ID"></b-input>
                   </b-field>
@@ -23,12 +27,25 @@
                   <b-field label="Date">
                     <b-input disabled v-model="createdAt" placeholder="Date"></b-input>
                   </b-field>
+                  <div class="buttons end pt-10">
+                    <b-button type="is-danger" @click="deleteArticle()" icon-right="delete">Delete</b-button>
+                  </div>
                 </b-tab-item>
+
                 <b-tab-item>
                   <template slot="header">
                     <b-icon icon="information-outline"></b-icon>
                     <span>Basic information</span>
                   </template>
+                  <b-field label="Type">
+                    <b-select v-model="news.newsType" placeholder="Select an article-type" expanded>
+                      <option
+                        v-for="option in this.newsTypes"
+                        :value="option"
+                        :key="option"
+                      >{{ option }}</option>
+                    </b-select>
+                  </b-field>
                   <b-field label="Tags">
                     <b-taginput
                       v-model="news.tags"
@@ -36,6 +53,7 @@
                       autocomplete
                       ref="taginput"
                       icon="label"
+                      maxtags="2"
                       placeholder="Add a tag"
                       @typing="getFilteredTags"
                     >
@@ -58,6 +76,13 @@
                     </b-taginput>
                   </b-field>
                   <b-field
+                    :type="validateTitle!== '' ?'is-danger' : null"
+                    :message="validateTitle"
+                    label="Title"
+                  >
+                    <b-input v-model="news.title" placeholder="Title" maxlength="100"></b-input>
+                  </b-field>
+                  <b-field
                     :type="validateDescription!== '' ?'is-danger' : null"
                     :message="validateDescription"
                     label="Description"
@@ -74,7 +99,7 @@
                       @click="putNews()"
                       type="is-success"
                       icon-right="check"
-                      :disabled="validateDescription !== ''"
+                      :disabled="validateDescription !== '' || validateTitle!= ''"
                     >Save</b-button>
                   </div>
                 </b-tab-item>
@@ -89,7 +114,6 @@
                   <div class="card mt-20 pl-10 pr-10">
                     <b-table
                       :data="views"
-                      :loading="isLoading"
                       ref="table"
                       paginated
                       per-page="10"
@@ -120,7 +144,7 @@
                           >{{props.row.active ? 'activated' : 'banned'}}</b-tag>
                         </b-table-column>
                         <b-table-column label="Detail">
-                          <b-button @click="detailClicked(props.row._id)">
+                          <b-button @click="profileDetailClicked(props.row._id)">
                             <span>
                               <b-icon icon="account-search" size="25"></b-icon>
                             </span>
@@ -151,7 +175,6 @@
                   <div class="card mt-20 pl-10 pr-10">
                     <b-table
                       :data="likes"
-                      :loading="isLoading"
                       ref="table"
                       paginated
                       per-page="10"
@@ -182,7 +205,7 @@
                           >{{props.row.active ? 'activated' : 'banned'}}</b-tag>
                         </b-table-column>
                         <b-table-column label="Detail">
-                          <b-button @click="detailClicked(props.row._id)">
+                          <b-button @click="profileDetailClicked(props.row._id)">
                             <span>
                               <b-icon icon="account-search" size="25"></b-icon>
                             </span>
@@ -213,7 +236,6 @@
                   <div class="card mt-20 pl-10 pr-10">
                     <b-table
                       :data="comments"
-                      :loading="isLoading"
                       ref="table"
                       paginated
                       per-page="10"
@@ -227,7 +249,6 @@
                           <b-tag>{{ props.row._id }}</b-tag>
                         </b-table-column>
                         <b-table-column
-                          width="500"
                           field="displayName"
                           label="Name"
                           sortable
@@ -243,18 +264,11 @@
                           label="Date"
                         >{{ new Date(props.row.createdAt).toLocaleDateString() }}</b-table-column>
                         <b-table-column label="Detail">
-                          <b-button @click="detailClicked(props.row.author._id)">
+                          <b-button @click="commentDetailClicked(props.row._id)">
                             <span>
-                              <b-icon icon="account-search" size="25"></b-icon>
+                              <b-icon icon="database-search" size="25"></b-icon>
                             </span>
                           </b-button>
-                        </b-table-column>
-                        <b-table-column>
-                          <b-button
-                            type="is-danger"
-                            @click="deleteComment(props.row._id)"
-                            icon-left="delete"
-                          >Delete</b-button>
                         </b-table-column>
                       </template>
                       <template slot="empty">
@@ -279,25 +293,16 @@
   </div>
 </template>
 <script>
-import newsService from "../../services/newservice";
+import newsService from "@/services/newservice";
 import { convertTimestamptoDate } from "@/assets/javascript/date";
-
-const data = [
-  "ทั่วไป",
-  "ความรัก",
-  "การเรียน",
-  "กีฬา",
-  "เตือนภัย",
-  "รีวิว",
-  "อาหาร"
-];
+import { NEWS_TYPES, NEWS_TAGS } from "@/config/constants";
 
 export default {
   data() {
     return {
-      news: {},
+      news: null,
       activeTab: 0,
-      filteredTags: data,
+      filteredTags: NEWS_TAGS,
       isLoading: false,
       views: [],
       likes: [],
@@ -305,13 +310,13 @@ export default {
     };
   },
   async mounted() {
-    this.newsId = this.$route.params.newsId;
-    if (this.newsId) {
+    const articleId = this.$route.params.articleId;
+    if (articleId !== undefined) {
       this.isLoading = true;
       await this.fetchNews();
       this.isLoading = false;
     } else {
-      this.$router.push("/news");
+      this.$router.push({ path: "/reports" });
     }
   },
   computed: {
@@ -321,6 +326,11 @@ export default {
       },
       set(newVal) {}
     },
+    validateTitle() {
+      if (typeof this.news.title !== "undefined" && this.news.title.length <= 0)
+        return "Title must be more than 0 chars long";
+      else return "";
+    },
     validateDescription() {
       if (
         typeof this.news.description !== "undefined" &&
@@ -328,11 +338,14 @@ export default {
       )
         return "Description must be more than 0 chars long";
       else return "";
+    },
+    newsTypes() {
+      return NEWS_TYPES;
     }
   },
   methods: {
     getFilteredTags(text) {
-      this.filteredTags = data.filter(option => {
+      this.filteredTags = NEWS_TAGS.filter(option => {
         return (
           option
             .toString()
@@ -345,39 +358,52 @@ export default {
       if (isActive) return "is-success";
       else return "is-danger";
     },
-    detailClicked(id) {
+    profileDetailClicked(id) {
       this.$router.push({ name: "User", params: { userId: id } });
     },
-    async deleteComment(id) {
-      this.isLoading = true;
-      await newsService.deleteComment(id);
-      this.fetchNews();
-      this.isLoading = false;
+    commentDetailClicked(id) {
+      console.log(id);
     },
     async fetchNews() {
-      const news = await newsService.getNewsById(this.newsId);
+      const articleId = this.$route.params.articleId;
+      const news = await newsService.getNewsById(articleId);
       this.news = news.data;
-      const views = await newsService.getViewsById(this.newsId);
+      const views = await newsService.getViewsById(articleId);
       this.views = views.data;
-      const likes = await newsService.getLikesById(this.newsId);
+      const likes = await newsService.getLikesById(articleId);
       this.likes = likes.data;
-      const comments = await newsService.getCommentsById(this.newsId);
+      const comments = await newsService.getCommentsById(articleId);
       this.comments = comments.data;
     },
     async putNews() {
-      if (this.validateDescription === "") {
-        const { description, _id, tags } = this.news;
+      if (this.validateTitle === "" && this.validateDescription === "") {
+        const { title, tags, description, newsType, _id } = this.news;
         this.isLoading = true;
         await newsService.putArticles(
           {
-            tags: tags,
+            title: title,
+            newsType: newsType,
+            tags: [...tags],
             description: description
           },
           _id
         );
         this.isLoading = false;
       }
+    },
+    async deleteArticle() {
+      const { _id } = this.news;
+      this.isLoading = true;
+      await newsService.deleteArticle(_id);
+      this.isLoading = false;
+      this.$router.push({ path: "/reports" });
     }
   }
 };
 </script>
+
+<style>
+ul.pagination-list {
+  margin: 0px;
+}
+</style>

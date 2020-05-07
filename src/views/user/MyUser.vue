@@ -45,7 +45,7 @@
                   <b-field label="Bio">
                     <b-input maxlength="50" v-model="user.bio"></b-input>
                   </b-field>
-                  <div v-if="user.role==='store'">
+                  <div v-if="user.role==='store' || user.role==='admin'">
                     <b-field label="Email">
                       <b-input maxlength="50" v-model="user.email"></b-input>
                     </b-field>
@@ -59,7 +59,7 @@
                       <b-input maxlength="15" v-model="user.mobilePhone"></b-input>
                     </b-field>
                     <b-field label="Contacts">
-                      <b-input v-model="user.contacts"></b-input>
+                      <b-input maxlength="500" v-model="user.contacts"></b-input>
                     </b-field>
                   </div>
                   <div class="buttons end pt-10">
@@ -207,6 +207,7 @@
 <script>
 import userService from "@/services/userservice";
 import { convertTimestamptoDate } from "@/assets/javascript/date";
+import { mapGetters } from "vuex";
 
 export default {
   data() {
@@ -224,11 +225,7 @@ export default {
       else return "is-danger";
     },
     async detailClicked(id) {
-      this.isLoading = true;
-      this.resetUser();
-      await this.fetchUser(id);
-      this.activeTab = 0;
-      this.isLoading = false;
+      this.$router.push({ name: "User", params: { userId: id } });
     },
     async setFollowings(id) {
       const res = await userService.getFollowings(id);
@@ -309,15 +306,18 @@ export default {
       )
         return "Display name must be more than 2 chars long";
       else return "";
-    }
+    },
+    ...mapGetters({
+      myUser: "Auth/getUser"
+    })
   },
   async mounted() {
-    const userId = this.$route.params.userId;
+    const userId = this.myUser._id;
     if (userId !== undefined) {
       this.isLoading = true;
       await this.fetchUser(userId);
       this.isLoading = false;
-    } else this.$router.push({ name: "Users" });
+    }
   }
 };
 </script>

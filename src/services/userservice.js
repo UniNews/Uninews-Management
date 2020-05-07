@@ -16,13 +16,8 @@ export default {
     getProfile: () => {
         return axios.get(`${API_URL}/profile`)
     },
-    getNormalUserById: (id) => {
-        return axios.get(`${API_URL}/users/${id}/normal`).then(response => response.data)
-            .catch(error => error)
-    },
     getUserById: (id) => {
-        return axios.get(`${API_URL}/users/${id}`).then(response => response.data)
-            .catch(error => error)
+        return axios.get(`${API_URL}/users/${id}`)
     },
     followUserById: (id) => {
         return axios.post(`${API_URL}/users/${id}`, {
@@ -47,4 +42,10 @@ export default {
             headers: { 'Content-Type': 'application/json' }
         });
     },
+    getFollowers: (id) => {
+        return axios.get(`${API_URL}/users/${id}/followers`)
+    },
+    getFollowings: (id) => {
+        return axios.get(`${API_URL}/users/${id}/followings`)
+    }
 }

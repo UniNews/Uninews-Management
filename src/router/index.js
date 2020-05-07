@@ -26,9 +26,14 @@ export default new Router({
       component: () => import('../views/news/NewsDetail')
     },
     {
-      path: '/report',
-      name: 'Report',
-      component: () => import('../views/Report')
+      path: '/reports',
+      name: 'Reports',
+      component: () => import('../views/report/Reports')
+    },
+    {
+      path: '/articleReport',
+      name: 'ArticleReport',
+      component: () => import('../views/report/ArticleReport')
     },
     {
       path: '/community',
@@ -39,6 +44,11 @@ export default new Router({
       path: '/user',
       name: 'User',
       component: () => import('../views/user/User')
+    },
+    {
+      path: '/myUser',
+      name: 'MyUser',
+      component: () => import('../views/user/MyUser')
     },
     {
       path: '/communities',

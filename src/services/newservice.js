@@ -9,7 +9,7 @@ export default {
         return axios.get(`${API_URL}/articles/${id}`)
     },
     postNews: async (data) => {
-        const result = await axios.post(`${API_URL}/articles`,data)
+        const result = await axios.post(`${API_URL}/articles`, data)
         return result
     },
     uploadNewsImage: (formData) => {
@@ -26,11 +26,11 @@ export default {
         const data = axios.delete(`${API_URL}/articles/${id}`)
         return data
     },
-    deleteComment:(id)=> {
+    deleteComment: (id) => {
         const data = axios.delete(`${API_URL}/comments/${id}`)
         return data
     },
-    getComment:(id)=> {
+    getComment: (id) => {
         const data = axios.get(`${API_URL}/comments/${id}`)
         return data
     },
@@ -46,7 +46,7 @@ export default {
         const data = axios.get(`${API_URL}/articles/${id}/likes`)
         return data
     },
-    putArticles: (json,id) => {
+    putArticles: (json, id) => {
         const data = axios.put(`${API_URL}/articles/${id}`, json, {
             headers: { 'Content-Type': 'application/json' }
         })

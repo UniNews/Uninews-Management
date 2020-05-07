@@ -117,6 +117,15 @@ div.pd-21:hover {
     flex-flow: wrap;
 } */
 
+.dp-flex {
+    display: flex;
+}
+.flex-center {
+    justify-content: center;
+}
+.flex-end {
+    justify-content: flex-end;
+}
 .avatar {
     height: 150px;
     width: 150px;
@@ -129,5 +138,17 @@ div.pd-21:hover {
 }
 
 .end {
-    justify-content: flex-end !important;
+    justify-content: flex-end !important;    
 }
+
+.news-image {
+    height: 250px;
+    object-fit: contain;
+}
+
+.card {
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+  }
