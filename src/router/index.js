@@ -31,11 +31,6 @@ export default new Router({
       component: () => import('../views/report/Reports')
     },
     {
-      path: '/articleReport',
-      name: 'ArticleReport',
-      component: () => import('../views/report/ArticleReport')
-    },
-    {
       path: '/community',
       name: 'Community',
       component: () => import('../views/community/Community')
@@ -49,6 +44,11 @@ export default new Router({
       path: '/myUser',
       name: 'MyUser',
       component: () => import('../views/user/MyUser')
+    },
+    {
+      path: '/comment',
+      name: 'Comment',
+      component: () => import('../views/comment/Comment')
     },
     {
       path: '/communities',

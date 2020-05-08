@@ -1,13 +1,10 @@
 <template>
   <div>
-    <div v-if="isLoading || !news">
+    <div v-if="isLoading || !comment">
       <b-loading :is-full-page="true" :active.sync="isLoading" />
     </div>
     <div v-else class="container mb-20 mt-20">
       <div class="card">
-        <div class="card-image is-centered columns pt-20">
-          <img class="news-image shadow" :src="news.imageURL" />
-        </div>
         <div class="card-content">
           <div class="content">
             <section>
@@ -18,68 +15,25 @@
                     <span>Comment</span>
                   </template>
                   <b-field label="ID">
-                    <b-input disabled v-model="news._id" placeholder="ID"></b-input>
+                    <b-input disabled v-model="comment._id" placeholder="ID"></b-input>
                   </b-field>
-                  <b-field v-if="news.author" label="Author">
-                    <b-input disabled v-model="news.author.displayName" placeholder="Author"></b-input>
+                  <b-field v-if="comment.article" label="Article">
+                    <div class="buttons">
+                      <b-button
+                        @click="articleDetailClicked()"
+                        type="is-primary"
+                        outlined
+                      >{{comment.article.articleType=='news'? comment.article.title :comment.article.description}}</b-button>
+                    </div>
                   </b-field>
-                  <b-field label="Date">
-                    <b-input disabled v-model="createdAt" placeholder="Date"></b-input>
-                  </b-field>
-                  <div class="buttons end pt-10">
-                    <b-button type="is-danger" @click="deleteArticle()" icon-right="delete">Delete</b-button>
-                  </div>
-                </b-tab-item>
-
-                <b-tab-item>
-                  <template slot="header">
-                    <b-icon icon="information-outline"></b-icon>
-                    <span>Basic information</span>
-                  </template>
-                  <b-field label="Type">
-                    <b-select v-model="news.newsType" placeholder="Select an article-type" expanded>
-                      <option
-                        v-for="option in this.newsTypes"
-                        :value="option"
-                        :key="option"
-                      >{{ option }}</option>
-                    </b-select>
-                  </b-field>
-                  <b-field label="Tags">
-                    <b-taginput
-                      v-model="news.tags"
-                      :data="filteredTags"
-                      autocomplete
-                      ref="taginput"
-                      icon="label"
-                      maxtags="2"
-                      placeholder="Add a tag"
-                      @typing="getFilteredTags"
-                    >
-                      <template slot-scope="props">
-                        <strong>{{props.option}}</strong>
-                      </template>
-                      <template slot="empty">There are no items</template>
-                      <template slot="selected" slot-scope="props">
-                        <b-tag
-                          v-for="(tag, index) in props.tags"
-                          :key="index"
-                          type="is-primary"
-                          rounded
-                          :tabstop="false"
-                          ellipsis
-                          closable
-                          @close="$refs.taginput.removeTag(index, $event)"
-                        >{{tag}}</b-tag>
-                      </template>
-                    </b-taginput>
-                  </b-field>
-                  <b-field
-                    :type="validateTitle!== '' ?'is-danger' : null"
-                    :message="validateTitle"
-                    label="Title"
-                  >
-                    <b-input v-model="news.title" placeholder="Title" maxlength="100"></b-input>
+                  <b-field v-if="comment.author" label="Author">
+                    <div class="buttons">
+                      <b-button
+                        @click="userDetailClicked(comment.author._id)"
+                        type="is-primary"
+                        outlined
+                      >{{comment.author.displayName}}</b-button>
+                    </div>
                   </b-field>
                   <b-field
                     :type="validateDescription!== '' ?'is-danger' : null"
@@ -87,19 +41,84 @@
                     label="Description"
                   >
                     <b-input
-                      type="textarea"
-                      v-model="news.description"
-                      maxlength="1000"
+                      maxlength="200"
+                      v-model="comment.description"
                       placeholder="Description"
                     ></b-input>
                   </b-field>
+                  <b-field label="Date">
+                    <b-input disabled v-model="createdAt" placeholder="Date"></b-input>
+                  </b-field>
                   <div class="buttons end pt-10">
                     <b-button
-                      @click="putNews()"
+                      @click="putComment()"
                       type="is-success"
                       icon-right="check"
-                      :disabled="validateDescription !== '' || validateTitle!= ''"
+                      :disabled="validateDescription !== ''"
                     >Save</b-button>
+                    <b-button type="is-danger" @click="deleteComment()" icon-right="delete">Delete</b-button>
+                  </div>
+                </b-tab-item>
+
+                <b-tab-item>
+                  <template slot="header">
+                    <b-icon icon="thumb-up"></b-icon>
+                    <span>
+                      Likes
+                      <b-tag rounded>{{likes.length}}</b-tag>
+                    </span>
+                  </template>
+                  <div class="card mt-20 pl-10 pr-10">
+                    <b-table
+                      :data="likes"
+                      ref="table"
+                      paginated
+                      per-page="10"
+                      aria-next-label="Next page"
+                      aria-previous-label="Previous page"
+                      aria-page-label="Page"
+                      aria-current-label="Current page"
+                    >
+                      <template slot-scope="props">
+                        <b-table-column field="id" label="ID" numeric width="10" centered>
+                          <b-tag>{{ props.row._id }}</b-tag>
+                        </b-table-column>
+                        <b-table-column
+                          width="500"
+                          field="displayName"
+                          label="Name"
+                          sortable
+                        >{{ props.row.displayName }}</b-table-column>
+                        <b-table-column sortable field="role" label="Role">{{ props.row.role }}</b-table-column>
+                        <b-table-column
+                          sortable
+                          field="createdAt"
+                          label="Date"
+                        >{{ new Date(props.row.createdAt).toLocaleDateString() }}</b-table-column>
+                        <b-table-column sortable field="active" label="Status">
+                          <b-tag
+                            :class="activeTag(props.row.active)"
+                          >{{props.row.active ? 'activated' : 'banned'}}</b-tag>
+                        </b-table-column>
+                        <b-table-column label="Detail">
+                          <b-button @click="userDetailClicked(props.row._id)">
+                            <span>
+                              <b-icon icon="account-search" size="25"></b-icon>
+                            </span>
+                          </b-button>
+                        </b-table-column>
+                      </template>
+                      <template slot="empty">
+                        <section class="section">
+                          <div class="content has-text-grey has-text-centered">
+                            <p>
+                              <b-icon icon="emoticon-sad" size="is-large"></b-icon>
+                            </p>
+                            <p>Nothing here.</p>
+                          </div>
+                        </section>
+                      </template>
+                    </b-table>
                   </div>
                 </b-tab-item>
               </b-tabs>
@@ -119,12 +138,14 @@ export default {
     return {
       comment: null,
       activeTab: 0,
-      isLoading: false
+      isLoading: false,
+      likes: []
     };
   },
   async mounted() {
-    this.commentId = this.$route.params.commentId;
-    if (this.commentId !== undefined) {
+    const commentId = this.$route.params.commentId;
+    if (commentId !== undefined) {
+      this.isLoading = true;
       await this.fetchComment();
       this.isLoading = false;
     } else {
@@ -134,49 +155,64 @@ export default {
   computed: {
     createdAt: {
       get() {
-        return convertTimestamptoDate(this.news.createdAt);
+        return convertTimestamptoDate(this.comment.createdAt);
       },
       set(newVal) {}
     },
-    validateTitle() {
-      if (typeof this.news.title !== "undefined" && this.news.title.length <= 0)
-        return "Title must be more than 0 chars long";
-      else return "";
-    },
     validateDescription() {
       if (
-        typeof this.news.description !== "undefined" &&
-        this.news.description.length <= 0
+        typeof this.comment.description !== "undefined" &&
+        this.comment.description.length <= 0
       )
         return "Description must be more than 0 chars long";
       else return "";
     }
   },
   methods: {
-    async deleteComment(id) {
+    async deleteComment() {
       this.isLoading = true;
-      await newsService.deleteComment(id);
-      await this.fetchComment();
+      await newsService.deleteComment(this.comment._id);
       this.isLoading = false;
+      this.$router.push({ name: "News" });
     },
     async fetchComment() {
-      this.commentId = this.$route.params.commentId;
+      const commentId = this.$route.params.commentId;
       const comment = await newsService.getComment(commentId);
-      this.comment = comments.data;
+      this.comment = comment.data;
+      const likes = await newsService.getCommentLikes(commentId);
+      this.likes = likes.data;
     },
-    async putNews() {
-      if (this.validateTitle === "" && this.validateDescription === "") {
-        const { title, tags, description, newsType, _id } = this.news;
+    activeTag(isActive) {
+      if (isActive) return "is-success";
+      else return "is-danger";
+    },
+    userDetailClicked(id) {
+      this.$router.push({ name: "User", params: { userId: id } });
+    },
+    articleDetailClicked() {
+      if (this.comment.article.articleType === "news")
+        this.$router.push({
+          name: "NewsDetail",
+          params: { newsId: this.comment.article._id }
+        });
+      else if (this.comment.article.articleType === "community")
+        this.$router.push({
+          name: "Community",
+          params: { newsId: this.comment.article._id }
+        });
+    },
+    async putComment() {
+      if (this.validateDescription === "") {
+        const { description, _id } = this.comment;
         this.isLoading = true;
-        await newsService.putArticles(
+        console.log(_id);
+        await newsService.putComment(
           {
-            title: title,
-            newsType: newsType,
-            tags: [...tags],
-            description: description
+            description
           },
           _id
         );
+
         this.isLoading = false;
       }
     }

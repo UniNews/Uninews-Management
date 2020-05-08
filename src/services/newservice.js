@@ -51,5 +51,14 @@ export default {
             headers: { 'Content-Type': 'application/json' }
         })
         return data
+    },
+    getCommentLikes: (id) => {
+        return axios.get(`${API_URL}/comments/${id}/likes`)
+    },
+    putComment: (json, id) => {
+        const data = axios.put(`${API_URL}/comments/${id}`, json, {
+            headers: { 'Content-Type': 'application/json' }
+        })
+        return data
     }
 }

@@ -144,7 +144,7 @@
                           >{{props.row.active ? 'activated' : 'banned'}}</b-tag>
                         </b-table-column>
                         <b-table-column label="Detail">
-                          <b-button @click="detailClicked(props.row._id)">
+                          <b-button @click="userDetailClicked(props.row._id)">
                             <span>
                               <b-icon icon="account-search" size="25"></b-icon>
                             </span>
@@ -205,7 +205,7 @@
                           >{{props.row.active ? 'activated' : 'banned'}}</b-tag>
                         </b-table-column>
                         <b-table-column label="Detail">
-                          <b-button @click="detailClicked(props.row._id)">
+                          <b-button @click="userDetailClicked(props.row._id)">
                             <span>
                               <b-icon icon="account-search" size="25"></b-icon>
                             </span>
@@ -265,18 +265,11 @@
                           label="Date"
                         >{{ new Date(props.row.createdAt).toLocaleDateString() }}</b-table-column>
                         <b-table-column label="Detail">
-                          <b-button @click="detailClicked(props.row.author._id)">
+                          <b-button @click="commentDetailClicked(props.row._id)">
                             <span>
-                              <b-icon icon="account-search" size="25"></b-icon>
+                              <b-icon icon="database-search" size="25"></b-icon>
                             </span>
                           </b-button>
-                        </b-table-column>
-                        <b-table-column>
-                          <b-button
-                            type="is-danger"
-                            @click="deleteComment(props.row._id)"
-                            icon-left="delete"
-                          >Delete</b-button>
                         </b-table-column>
                       </template>
                       <template slot="empty">
@@ -320,6 +313,7 @@ export default {
   async mounted() {
     this.newsId = this.$route.params.newsId;
     if (this.newsId !== undefined) {
+      this.isLoading = true;
       await this.fetchNews();
       this.isLoading = false;
     } else {
@@ -365,8 +359,14 @@ export default {
       if (isActive) return "is-success";
       else return "is-danger";
     },
-    detailClicked(id) {
+    userDetailClicked(id) {
       this.$router.push({ name: "User", params: { userId: id } });
+    },
+    commentDetailClicked(id) {
+      this.$router.push({
+        name: "Comment",
+        params: { commentId: id }
+      });
     },
     async deleteComment(id) {
       this.isLoading = true;

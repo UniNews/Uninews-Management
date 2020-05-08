@@ -41,6 +41,15 @@
                     label="Description"
                   >{{ props.row.description }}</b-table-column>
                   <b-table-column
+                    field="postDestination"
+                    label="Post ID"
+                    numeric
+                    width="10"
+                    centered
+                  >
+                    <b-tag>{{ props.row.postDestination }}</b-tag>
+                  </b-table-column>
+                  <b-table-column
                     sortable
                     field="createdAt"
                     label="Date"
@@ -90,9 +99,20 @@ export default {
     },
     goReport(report) {
       if (report.type === "article") {
+        if (report.articleType === "community")
+          this.$router.push({
+            name: "Community",
+            params: { newsId: report.postDestination }
+          });
+        else if (report.articleType === "news")
+          this.$router.push({
+            name: "NewsDetail",
+            params: { newsId: report.postDestination }
+          });
+      } else if (report.type === "comment") {
         this.$router.push({
-          name: "ArticleReport",
-          params: { articleId: report.postDestination }
+          name: "Comment",
+          params: { commentId: report.postDestination }
         });
       }
     }
