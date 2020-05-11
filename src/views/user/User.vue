@@ -24,7 +24,7 @@
                     <b-input disabled v-model="user.role" placeholder="Role"></b-input>
                   </b-field>
                   <b-field label="Active">
-                    <b-switch disabled :value="user.active" type="is-success"></b-switch>
+                    <b-switch @input="this.toggleActive" :value="user.active" type="is-success"></b-switch>
                   </b-field>
                   <b-field label="Created date">
                     <b-input disabled v-model="createdAt" placeholder="Created at"></b-input>
@@ -233,6 +233,27 @@ export default {
     async setFollowings(id) {
       const res = await userService.getFollowings(id);
       this.followings = res.data.followings;
+    },
+    toggleActive(value) {
+      if (value) {
+        this.unbanUser();
+      } else {
+        this.banUser();
+      }
+    },
+    async banUser() {
+      const { _id } = this.user;
+      this.isLoading = true;
+      await userService.banUser(_id);
+      this.user.active = false;
+      this.isLoading = false;
+    },
+    async unbanUser() {
+      const { _id } = this.user;
+      this.isLoading = true;
+      await userService.unbanUser(_id);
+      this.user.active = true;
+      this.isLoading = false;
     },
     async setFollowers(id) {
       const res = await userService.getFollowers(id);

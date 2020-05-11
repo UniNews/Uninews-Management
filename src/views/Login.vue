@@ -35,7 +35,7 @@ export default {
   },
   watch: {
     user: function(value) {
-      if (value) this.$router.push("/");
+      if (value) this.$router.push("/news");
     }
   },
   methods: {

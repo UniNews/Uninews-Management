@@ -17,12 +17,17 @@
                     <b-icon icon="newspaper"></b-icon>
                     <span>News</span>
                   </template>
-                  <!-- TODO: ประกอบไปด้วย _id, author, createdAt -->
                   <b-field label="ID">
                     <b-input disabled v-model="news._id" placeholder="ID"></b-input>
                   </b-field>
                   <b-field v-if="news.author" label="Author">
-                    <b-input disabled v-model="news.author.displayName" placeholder="Author"></b-input>
+                    <div class="buttons">
+                      <b-button
+                        @click="userDetailClicked(news.author._id)"
+                        type="is-primary"
+                        outlined
+                      >{{news.author.displayName}}</b-button>
+                    </div>
                   </b-field>
                   <b-field label="Date">
                     <b-input disabled v-model="createdAt" placeholder="Date"></b-input>
@@ -383,6 +388,9 @@ export default {
       this.likes = likes.data;
       const comments = await newsService.getCommentsById(this.newsId);
       this.comments = comments.data;
+    },
+    userDetailClicked(id) {
+      this.$router.push({ name: "User", params: { userId: id } });
     },
     async putNews() {
       if (this.validateTitle === "" && this.validateDescription === "") {

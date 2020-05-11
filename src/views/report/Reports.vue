@@ -11,7 +11,7 @@
               <b-input
                 rounded
                 v-model="query"
-                placeholder="Search name, description..."
+                placeholder="Search name, description, post ID..."
                 icon="magnify"
               ></b-input>
             </div>
@@ -49,6 +49,7 @@
                   >
                     <b-tag>{{ props.row.postDestination }}</b-tag>
                   </b-table-column>
+
                   <b-table-column
                     sortable
                     field="createdAt"
@@ -57,12 +58,20 @@
                   <b-table-column sortable field="type" label="Type">
                     <b-tag :class="reportType(props.row.type)">{{props.row.type}}</b-tag>
                   </b-table-column>
+
                   <b-table-column label="Detail">
-                    <b-button @click="goReport(props.row)">
+                    <b-button v-if="!props.row.removed" @click="goReport(props.row)">
                       <span>
                         <b-icon icon="database-search" size="25"></b-icon>
                       </span>
                     </b-button>
+                    <b-tooltip type="is-danger" v-else label="Removed">
+                      <b-button disabled>
+                        <span>
+                          <b-icon icon="database-search" size="25"></b-icon>
+                        </span>
+                      </b-button>
+                    </b-tooltip>
                   </b-table-column>
                 </template>
               </b-table>
@@ -128,11 +137,10 @@ export default {
         return this.reports.filter(item => {
           return (
             item.description.toLowerCase().match(this.query.toLowerCase()) ||
-            (item.author
-              ? item.author.displayName
-                  .toLowerCase()
-                  .match(this.query.toLowerCase())
-              : false)
+            item.author.displayName
+              .toLowerCase()
+              .match(this.query.toLowerCase()) ||
+            item.postDestination.toLowerCase().match(this.query.toLowerCase())
           );
         });
       } else return this.reports;

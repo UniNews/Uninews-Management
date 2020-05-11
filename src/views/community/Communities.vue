@@ -44,6 +44,7 @@
                   <b-table-column field="tags" label="Tags">
                     <div v-if="props.row.tags && props.row.tags.length > 0">
                       <b-tag
+                        class="mr-5"
                         type="is-primary"
                         :key="index"
                         v-for="(tag, index) in props.row.tags"

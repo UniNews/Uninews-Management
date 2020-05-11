@@ -67,6 +67,7 @@
                         <p>{{ props.row.description }}</p>
                       </div>
                       <b-tag
+                        class="mr-5"
                         type="is-primary"
                         :key="index"
                         v-for="(tag, index) in props.row.tags"
