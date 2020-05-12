@@ -322,7 +322,7 @@ export default {
       await this.fetchNews();
       this.isLoading = false;
     } else {
-      this.$router.push({ path: "/news" });
+      this.$router.push({ path: "/" });
     }
   },
   computed: {
@@ -413,7 +413,7 @@ export default {
       this.isLoading = true;
       await newsService.deleteArticle(_id);
       this.isLoading = false;
-      this.$router.push({ path: "/news" });
+      this.$router.push({ path: "/" });
     }
   }
 };

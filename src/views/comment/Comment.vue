@@ -149,7 +149,7 @@ export default {
       await this.fetchComment();
       this.isLoading = false;
     } else {
-      this.$router.push({ path: "/news" });
+      this.$router.push({ path: "/" });
     }
   },
   computed: {

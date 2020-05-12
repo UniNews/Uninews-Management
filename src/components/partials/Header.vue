@@ -1,7 +1,7 @@
 <template>
   <b-navbar>
     <template slot="brand">
-      <b-navbar-item tag="router-link" :to="{ path: '/news' }">
+      <b-navbar-item tag="router-link" :to="{ path: '/' }">
         <img
           src="https://raw.githubusercontent.com/buefy/buefy/dev/static/img/buefy-logo.png"
           alt="Lightweight UI components for Vue.js based on Bulma"
@@ -10,7 +10,7 @@
     </template>
     <template slot="start">
       <b-navbar-item href="/#/users">Users</b-navbar-item>
-      <b-navbar-item href="/#/news">News</b-navbar-item>
+      <b-navbar-item href="/#/">News</b-navbar-item>
       <b-navbar-item href="/#/communities">Communities</b-navbar-item>
       <b-navbar-item href="/#/reports">Reports</b-navbar-item>
     </template>

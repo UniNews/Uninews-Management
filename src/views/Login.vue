@@ -41,7 +41,7 @@ export default {
   },
   watch: {
     user: function(value) {
-      if (value) this.$router.push("/news");
+      if (value) this.$router.push("/");
     }
   },
   methods: {
